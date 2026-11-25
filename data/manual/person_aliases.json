@@ -1,0 +1,306 @@
+{
+ "merge": [
+  {
+   "person_ids": [
+    "orcid:0000-0002-7304-6056",
+    "name:richard todd evans|datacite",
+    "name:r todd evans|datacite",
+    "name:richard evans|datacite"
+   ],
+   "reason": "DataCite records list all three name forms at Texas Advanced Computing Center (e.g. doi:10.5281/zenodo.49983, doi:10.5281/zenodo.495218, doi:10.5281/zenodo.5509414); the ORCID's works list doi:10.1109/hust.2014.7 with the same TACC affiliation"
+  },
+  {
+   "person_ids": [
+    "orcid:0000-0003-3568-8039",
+    "openalex:A5102961733",
+    "openalex:A5087616641",
+    "openalex:A5151070207"
+   ],
+   "reason": "The ORCID's employment lists TACC (ror:00xg4bh43); the merged OpenAlex authorships list TACC (e.g. doi:10.1002/smll.202501946, doi:10.1021/acs.jpcc.5c04729, doi:10.1007/978-3-031-40843-4_25, arXiv 2609.05709), while the other ORCIDs OpenAlex attached to A5102961733 and A5087616641 list no TACC affiliation"
+  },
+  {
+   "person_ids": [
+    "openalex:A5101883722",
+    "openalex:A5162123940"
+   ],
+   "reason": "Same full name and both OpenAlex profiles list TACC (A5162123940 on OpenAlex work W7233655932)"
+  }
+ ],
+ "split": [
+  {
+   "id": "name:jian huang|nsf",
+   "reason": "NSF 0906324 awardee is University of Tennessee Knoxville; OpenAlex A5059939272 (ORCID 0000-0003-2845-797X) lists no University of Tennessee affiliation, and its UT Austin (ror:00hj54h04) affiliation years fall outside the award period (2009-2013)"
+  }
+ ],
+ "strip_orcid": [
+  {
+   "person_id": "orcid:0000-0003-3659-0850",
+   "orcid": "0000-0003-3659-0850",
+   "reason": "OpenAlex attaches this ORCID to IceCube Collaboration authorships listing University of Delaware (ror:01sbq1a82), e.g. doi:10.1038/s41567-022-01762-1; the ORCID record lists none of these works and no affiliation with that institution"
+  },
+  {
+   "person_id": "orcid:0000-0001-8180-4403",
+   "orcid": "0000-0001-8180-4403",
+   "reason": "OpenAlex attaches this ORCID to IceCube Collaboration authorships listing ror:04r3m2882, e.g. doi:10.22323/1.395.1073; the ORCID record lists none of these works and no affiliation with that institution; OpenAlex attaches ORCID 0000-0001-6733-963X to the same as-listed name and institution on doi:10.22323/1.395.0225"
+  },
+  {
+   "person_id": "orcid:0000-0001-8529-7357",
+   "orcid": "0000-0001-8529-7357",
+   "reason": "OpenAlex attaches this ORCID to IceCube Collaboration authorships listing Massachusetts Institute of Technology (ror:042nb2s44), e.g. doi:10.1103/PhysRevD.110.022001; the ORCID record lists none of these works and no affiliation with that institution"
+  },
+  {
+   "person_id": "nih:10583634",
+   "orcid": "0000-0003-2768-8688",
+   "reason": "OpenAlex A5018803610 (ORCID 0000-0003-2768-8688) affiliations are Georgia Institute of Technology (ror:01zkghx44); NIH RePORTER profile 10583634, co-PI on OT2OD037936, holds projects at Johns Hopkins University (e.g. U24HG010263)"
+  },
+  {
+   "person_id": "orcid:0000-0002-3266-7358",
+   "orcid": "0000-0002-3266-7358",
+   "reason": "OpenAlex attaches this ORCID to IceCube Collaboration authorships listing ror:04xfq0f34, e.g. doi:10.1103/PhysRevLett.135.031001; the ORCID record lists none of these works and no affiliation with that institution"
+  },
+  {
+   "person_id": "orcid:0009-0002-9974-3746",
+   "orcid": "0009-0002-9974-3746",
+   "reason": "OpenAlex attaches this ORCID to IceCube Collaboration authorships listing Massachusetts Institute of Technology (ror:042nb2s44), e.g. doi:10.1103/PhysRevLett.132.151001; the ORCID record lists none of these works and no affiliation with that institution"
+  },
+  {
+   "person_id": "orcid:0000-0002-2848-6095",
+   "orcid": "0000-0002-2848-6095",
+   "reason": "The ORCID record has no public works or affiliations; NSF 1213057 and 1565431 list this person with a given name that conflicts with the ORCID record's"
+  },
+  {
+   "person_id": "orcid:0000-0001-8035-4818",
+   "orcid": "0000-0001-8035-4818",
+   "reason": "The ORCID record has no public works or affiliations; OpenAlex groups doi:10.1023/A:1023566402391 with doi:10.1002/cpe.695, which lists a given name that conflicts with the ORCID record's"
+  },
+  {
+   "person_id": "orcid:0009-0009-2658-4634",
+   "orcid": "0009-0009-2658-4634",
+   "reason": "The ORCID record has no public works; doi:10.1088/1612-202X/aaf22d lists the author with a given name that conflicts with the ORCID record's"
+  }
+ ],
+ "confirm_orcid": [
+  {
+   "orcid": "0000-0003-0894-990X",
+   "name_variants": [
+    "Antia Lamas-Linares",
+    "Ant\u00eda Lamas-Linares",
+    "Lamas-Linares, Antia"
+   ],
+   "reason": "OpenAlex attaches this ORCID to doi:10.1088/1612-202X/aaf22d, doi:10.1103/PhysRevLett.121.150402 and doi:10.1063/1.5086493, whose authorships list TACC (ror:00xg4bh43); the ORCID record has no public works, so the automatic check has nothing to compare",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0002-3571-5212",
+   "person_ids": [
+    "orcid:0000-0002-3571-5212",
+    "nsf:000256407"
+   ],
+   "reason": "NSF 1203560 (NSF PI id 000256407) and OpenAlex authorships carrying this ORCID (e.g. doi:10.1145/2616498.2616533) list the same institution, ror:01y64my43; none of the ORCID's public works is in this dataset, so the automatic check has nothing to compare",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0001-8004-5169",
+   "person_ids": [
+    "name:eric fosler lussier|nsf"
+   ],
+   "reason": "ORCID employment lists The Ohio State University (ror:00rs6vg23) for years covering NSF 2112606 (2021-2027), awarded to that institution; co-PI institutions are assigned after the automatic check runs",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0001-8862-3277",
+   "person_ids": [
+    "orcid:0000-0001-8862-3277"
+   ],
+   "reason": "ORCID works list doi:10.1145/3736731.3746148; OpenAlex A5113566328 carries this ORCID",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0002-5834-8451",
+   "person_ids": [
+    "orcid:0000-0002-5834-8451"
+   ],
+   "reason": "ORCID works list doi:10.1021/acsestwater.4c00671; OpenAlex A5048843612 carries this ORCID",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0002-3452-2179",
+   "name_variants": [
+    "Justin Small"
+   ],
+   "reason": "Crossref attaches this ORCID to the as-listed name on doi:10.1029/2023GL106100 and doi:10.1038/s41612-025-01274-8 (ror:05cvfcr44); ORCID works list doi:10.1029/2023GL106100",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0002-0393-7734",
+   "name_variants": [
+    "Ben Prather",
+    "Ben S Prather",
+    "Ben S. Prather"
+   ],
+   "reason": "Crossref attaches this ORCID to the as-listed names on doi:10.3847/2041-8213/ac65eb and doi:10.3847/1538-4357/ae34af; ORCID works list both DOIs",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0001-7948-6493",
+   "name_variants": [
+    "Karim Agabi"
+   ],
+   "reason": "ORCID works list doi:10.3847/1538-3881/ac517f; its author list is truncated, so the automatic works overlap cannot apply",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0001-8058-4752",
+   "name_variants": [
+    "Pino, B. Gouveia dal",
+    "B. Gouveia dal Pino"
+   ],
+   "reason": "ORCID works list doi:10.1007/978-3-642-30442-2_2, which carries the same as-listed name as arXiv doi:10.48550/arXiv.1202.1559",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0002-2468-3315",
+   "name_variants": [
+    "Alexa Henny",
+    "Henny, Alexa"
+   ],
+   "reason": "DataCite creator metadata of doi:10.17603/ds2-22ce-n609 lists this ORCID for the as-listed name",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0002-1348-7693",
+   "name_variants": [
+    "Ann Fu"
+   ],
+   "reason": "DataCite creator metadata of HuBMAP datasets (e.g. doi:10.35079/hbm254.jwjl.924) lists this ORCID for the as-listed name",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0001-6859-7737",
+   "name_variants": [
+    "Steven Lu"
+   ],
+   "reason": "Crossref attaches this ORCID to the as-listed name on doi:10.3847/PSJ/adef07 and doi:10.1029/2020EA001336; ORCID works list both DOIs",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0003-2461-1589",
+   "name_variants": [
+    "Srivatsan Raman"
+   ],
+   "reason": "Crossref attaches this ORCID to the as-listed name on doi:10.1126/sciadv.adt6432; ORCID works list that DOI",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0002-7304-6056",
+   "name_variants": [
+    "Todd Evans"
+   ],
+   "reason": "ORCID works list doi:10.1109/hust.2014.7 under the as-listed name",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0003-4247-2033",
+   "person_ids": [
+    "name:aman yadav|nsf"
+   ],
+   "reason": "ORCID employment lists Michigan State University (ror:05hs6h993) for years covering NSF 2417664 (2025-2029), the institution assigned on that award",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0002-2390-2002",
+   "person_ids": [
+    "nsf:269878440"
+   ],
+   "reason": "ORCID employment lists Stony Brook University (ror:05qghxh33) for years covering NSF 2031580 (2020-2023), awarded to that institution",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0002-1596-7279",
+   "person_ids": [
+    "name:virginia walbot|nsf"
+   ],
+   "reason": "ORCID employment lists Stanford University (ror:00f54p054) for years covering NSF 1339229 and 1649424 (2014-2020), the institution assigned on those awards",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0002-4055-314X",
+   "person_ids": [
+    "name:anne ottenbreit leftwich|nsf"
+   ],
+   "reason": "ORCID employment lists Indiana University Bloomington (ror:02k40bc56), the institution assigned on NSF 1822011 and 2137834",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0001-7097-9283",
+   "person_ids": [
+    "name:harry millwater|nsf"
+   ],
+   "reason": "ORCID employment lists The University of Texas at San Antonio (ror:01kd65564) for years covering NSF 1827139 (2018-2021), the institution assigned on that award",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0002-8101-8119",
+   "person_ids": [
+    "name:raghu machiraju|nsf"
+   ],
+   "reason": "ORCID employment lists The Ohio State University (ror:00rs6vg23) for years covering NSF 2112606 (2021-2027), the institution assigned on that award",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0001-9672-6225",
+   "person_ids": [
+    "name:vipin chaudhary|nsf"
+   ],
+   "reason": "ORCID employment lists Case Western Reserve University (ror:051fd9666) for years covering NSF 2112606 (2021-2027), the institution assigned on that award",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0002-3991-0912",
+   "person_ids": [
+    "name:jeffrey l caplan|nsf"
+   ],
+   "reason": "ORCID employment lists University of Delaware (ror:01sbq1a82) for years covering NSF 1649424 (2016-2020), the institution assigned on that award",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0001-9473-3544",
+   "person_ids": [
+    "name:nancy m ide|nsf"
+   ],
+   "reason": "ORCID employment lists Vassar College (ror:022x6qg61) for years covering NSF 1661497 (2017-2021), the institution assigned on that award",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0003-4309-1355",
+   "person_ids": [
+    "name:patrick e phelan|nsf"
+   ],
+   "reason": "ORCID employment lists Arizona State University (ror:03efmqc40), the institution assigned on NSF 0855277",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0001-7549-9764",
+   "person_ids": [
+    "name:junalyn p navarra madsen|nsf"
+   ],
+   "reason": "ORCID employment lists Texas Woman's University (ror:04dyzkj40) for years covering NSF 0806963 and 1154394 (2008-2018), the institution assigned on those awards",
+   "confirmed_by": "maintainer"
+  },
+  {
+   "orcid": "0000-0002-7026-7419",
+   "person_ids": [
+    "name:rajesh kalyanam|nsf"
+   ],
+   "reason": "ORCID employment lists Purdue University for years covering NSF 2016704 (2020-2023), the institution assigned on that award (ror:02dqehb95)",
+   "confirmed_by": "maintainer"
+  }
+ ],
+ "display_name": [
+  {
+   "person_id": "orcid:0000-0002-7304-6056",
+   "display_name": "R. Todd Evans",
+   "reason": "As-listed name on doi:10.1145/3311790.3396656, doi:10.1016/j.parco.2017.07.002 and DataCite doi:10.5281/zenodo.5509414"
+  }
+ ]
+}

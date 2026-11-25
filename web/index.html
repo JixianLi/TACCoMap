@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TACCoMap — TACC collaborations browser</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <h1><a href="#/papers">TACCoMap</a></h1>
+    <span class="subtitle">TACC collaborations, 2001–present</span>
+  </header>
+  <nav id="tabs" class="tabs" aria-label="Record types"></nav>
+  <main class="layout">
+    <aside id="filters" class="filters" aria-label="Filters"></aside>
+    <section id="results" class="results" aria-live="polite"></section>
+  </main>
+  <div id="drawer-backdrop" class="drawer-backdrop" hidden></div>
+  <aside id="drawer" class="drawer" hidden aria-label="Record detail">
+    <button type="button" id="drawer-close" class="drawer-close" aria-label="Close">×</button>
+    <div id="drawer-content"></div>
+  </aside>
+  <footer id="footer" class="site-footer"></footer>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

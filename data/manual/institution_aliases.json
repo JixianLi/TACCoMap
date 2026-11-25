@@ -1,0 +1,447 @@
+{
+ "description": "Hand-verified institution name variants -> institution id, applied by harvest/build.py before dataset-name and ROR affiliation matching. Variants are compared after common.normalize_name and dropping a leading 'the', so case and punctuation do not matter. Every target was checked against the ROR API (2026-11-24); campus/system corrections added the same day were checked against cached ROR records in data/raw/ror. Sub-units without their own ROR record are mapped to the parent university, as ROR matching does for departments.",
+ "aliases": [
+  {
+   "institution_id": "ror:00hj54h04",
+   "ror_name": "The University of Texas at Austin",
+   "variants": [
+    "UNIVERSITY OF TEXAS AT AUSTIN",
+    "University of Texas at Austin",
+    "The University of Texas at Austin",
+    "UT Austin",
+    "UT-Austin",
+    "U.T. Austin",
+    "Univ. of Texas at Austin",
+    "University of Texas, Austin",
+    "University of Texas-Austin",
+    "University of Texas Austin"
+   ]
+  },
+  {
+   "institution_id": "ror:00hj54h04",
+   "ror_name": "The University of Texas at Austin",
+   "note": "Oden Institute for Computational Engineering and Sciences (formerly ICES) has no ROR record; mapped to its parent university.",
+   "variants": [
+    "Oden Institute",
+    "Oden Institute for Computational Engineering and Sciences",
+    "Oden Institute for Computational Engineering & Sciences",
+    "Institute for Computational Engineering and Sciences",
+    "Institute for Computational Engineering & Sciences"
+   ]
+  },
+  {
+   "institution_id": "ror:00xg4bh43",
+   "ror_name": "Texas Advanced Computing Center",
+   "variants": [
+    "TACC",
+    "@TACC",
+    "Texas Advanced Computing Center",
+    "Texas Advanced Computing Center (TACC)",
+    "The Texas Advanced Computing Center"
+   ]
+  },
+  {
+   "institution_id": "ror:03r10zj06",
+   "ror_name": "National Center for Supercomputing Applications",
+   "note": "Not ror:03g9ch715 (an unrelated NCSA in Sofia, Bulgaria).",
+   "variants": [
+    "National Center for Supercomputing Applications",
+    "NCSA",
+    "National Center for Supercomputing Applications (NCSA)"
+   ]
+  },
+  {
+   "institution_id": "ror:03r0ha626",
+   "ror_name": "University of Utah",
+   "note": "Scientific Computing and Imaging (SCI) Institute has no ROR record; mapped to its parent university.",
+   "variants": [
+    "Scientific Computing and Imaging Institute",
+    "SCI Institute"
+   ]
+  },
+  {
+   "institution_id": "ror:02dqehb95",
+   "ror_name": "Purdue University West Lafayette",
+   "note": "Bare 'Purdue University' is taken to mean the main campus; ROR's own affiliation match for it was 'Hue University of Education'. ROR has no 'Purdue University' name on any record.",
+   "variants": [
+    "Purdue University",
+    "Purdue University West Lafayette",
+    "Purdue University, West Lafayette"
+   ]
+  },
+  {
+   "institution_id": "ror:04zhhyn23",
+   "ror_name": "University Corporation for Atmospheric Research",
+   "variants": [
+    "University Corporation for Atmospheric Research",
+    "University Corp. for Atmospheric Research",
+    "UCAR"
+   ]
+  },
+  {
+   "institution_id": "ror:035a68863",
+   "ror_name": "United States Geological Survey",
+   "variants": [
+    "USGS",
+    "US Geological Survey",
+    "U.S. Geological Survey",
+    "United States Geological Survey"
+   ]
+  },
+  {
+   "institution_id": "ror:046rm7j60",
+   "ror_name": "University of California, Los Angeles",
+   "variants": [
+    "UCLA",
+    "University of California Los Angeles (UCLA)",
+    "University of California, Los Angeles (UCLA)"
+   ]
+  },
+  {
+   "institution_id": "ror:01y64my43",
+   "ror_name": "University at Buffalo, State University of New York",
+   "variants": [
+    "SUNY at Buffalo",
+    "SUNY Buffalo",
+    "State University of New York at Buffalo"
+   ]
+  },
+  {
+   "institution_id": "ror:05xpvk416",
+   "ror_name": "National Institute of Standards and Technology",
+   "variants": [
+    "NIST"
+   ]
+  },
+  {
+   "institution_id": "ror:00af1rw21",
+   "ror_name": "Shodor",
+   "variants": [
+    "SHODOR EDUCATION FOUNDATION INC, THE",
+    "Shodor Education Foundation",
+    "Shodor Education Foundation, Inc."
+   ]
+  },
+  {
+   "institution_id": "ror:05n8t2628",
+   "ror_name": "University of Washington Tacoma",
+   "variants": [
+    "University of Washington-Tacoma Campus",
+    "University of Washington Tacoma",
+    "University of Washington, Tacoma"
+   ]
+  },
+  {
+   "institution_id": "ror:05jbt9m15",
+   "ror_name": "University of Arkansas at Fayetteville",
+   "variants": [
+    "University of Arkansas Fayetteville",
+    "University of Arkansas at Fayetteville",
+    "University of Arkansas, Fayetteville"
+   ]
+  },
+  {
+   "institution_id": "ror:031e6xm45",
+   "ror_name": "Universidad del Norte (Colombia)",
+   "note": "Several ROR records are named 'Universidad del Norte' (CO, MX, PY); only the Colombia-qualified variants are aliased.",
+   "variants": [
+    "Universidad del Norte Columbia",
+    "Universidad del Norte Colombia",
+    "Universidad del Norte, Colombia"
+   ]
+  },
+  {
+   "institution_id": "ror:01zkghx44",
+   "ror_name": "Georgia Institute of Technology",
+   "note": "Georgia Tech Research Corporation is the contracting entity that receives Georgia Tech's sponsored awards; it has no ROR record of its own.",
+   "variants": [
+    "GEORGIA TECH RESEARCH CORP",
+    "Georgia Tech Research Corporation"
+   ]
+  },
+  {
+   "institution_id": "ror:0354t7b78",
+   "ror_name": "RTX (United States)",
+   "note": "Raytheon BBN Technologies has no ROR record; mapped to its parent company (formerly Raytheon Technologies).",
+   "variants": [
+    "BBN/Raytheon",
+    "Raytheon BBN Technologies",
+    "Raytheon BBN"
+   ]
+  },
+  {
+   "institution_id": "ror:023b0x485",
+   "ror_name": "Johannes Gutenberg University Mainz",
+   "note": "Full affiliation string used by IceCube papers; the ROR affiliation API chose no organization for it.",
+   "variants": [
+    "Institute of Physics, University of Mainz, Staudinger Weg 7, D-55099 Mainz, Germany"
+   ]
+  },
+  {
+   "institution_id": "ror:01wspgy28",
+   "ror_name": "University of Hawaiʻi at Mānoa",
+   "note": "Campus named in the string; the ROR affiliation API chose the University of Hawaii System instead (rejected by the build's more-specific-name check).",
+   "variants": [
+    "University of Hawaii Manoa",
+    "University of Hawaii, Manoa",
+    "University of Hawaii at Manoa",
+    "University of Hawaii at Mānoa",
+    "University of Hawaii Manoa (University of Hawaii at Manoa)",
+    "University of Hawaii Manoa (University of Hawaii at Mnoa)"
+   ]
+  },
+  {
+   "institution_id": "ror:008s83205",
+   "ror_name": "University of Alabama at Birmingham",
+   "note": "Campus named in the string; the ROR affiliation API chose the University of Alabama (Tuscaloosa) instead (rejected by the build's more-specific-name check).",
+   "variants": [
+    "University of Alabama, Birmingham",
+    "University of Alabama Birmingham",
+    "University of Alabama at Birmingham"
+   ]
+  },
+  {
+   "institution_id": "ror:02zsxwr40",
+   "ror_name": "University of Alabama in Huntsville",
+   "note": "Campus named in the string; the ROR affiliation API chose the University of Alabama (Tuscaloosa) instead (rejected by the build's more-specific-name check).",
+   "variants": [
+    "University of Alabama Huntsville",
+    "University of Alabama, Huntsville",
+    "Univ. of Alabama Huntsville",
+    "University of Alabama in Huntsville",
+    "University of Alabama at Huntsville"
+   ]
+  },
+  {
+   "institution_id": "ror:043mer456",
+   "ror_name": "University of Nebraska–Lincoln",
+   "note": "Campus named in the string; the ROR affiliation API chose the University of Nebraska System instead (rejected by the build's more-specific-name check).",
+   "variants": [
+    "University of Nebraska, Lincoln",
+    "University of Nebraska Lincoln",
+    "University of Nebraska-Lincoln"
+   ]
+  },
+  {
+   "institution_id": "ror:01w0d5g70",
+   "ror_name": "University of Missouri–Kansas City",
+   "note": "Campus named in the string; the ROR affiliation API chose the University of Missouri (Columbia) instead (rejected by the build's more-specific-name check).",
+   "variants": [
+    "University of Missouri, Kansas City",
+    "University of Missouri-Kansas City",
+    "University of Missouri Kansas City"
+   ]
+  },
+  {
+   "institution_id": "ror:05rrcem69",
+   "ror_name": "University of California, Davis",
+   "note": "Campus named in the string; the ROR affiliation API chose the University of California System instead (rejected by the build's more-specific-name check).",
+   "variants": [
+    "University of California Davis (UCD) (UC Davis)",
+    "University of California Davis",
+    "University of California at Davis",
+    "UC Davis"
+   ]
+  },
+  {
+   "institution_id": "ror:01an7q238",
+   "ror_name": "University of California, Berkeley",
+   "note": "Campus named in the string; the ROR affiliation API chose the University of California System instead (rejected by the build's more-specific-name check). 'Berkley' is a misspelling found in the data.",
+   "variants": [
+    "University of California Berkeley (UC Berkeley)",
+    "University of California Berkeley",
+    "University of California at Berkeley",
+    "University of California at Berkley",
+    "University of California, Berkley",
+    "UC Berkeley"
+   ]
+  },
+  {
+   "institution_id": "ror:0168r3w48",
+   "ror_name": "University of California San Diego",
+   "note": "Campus named in the string; the ROR affiliation API chose the University of California System instead (rejected by the build's more-specific-name check).",
+   "variants": [
+    "University of California San Diego (UCSD) (UC San Diego)",
+    "University of California, San Diego",
+    "UC San Diego",
+    "UCSD"
+   ]
+  },
+  {
+   "institution_id": "ror:04gyf1771",
+   "ror_name": "University of California, Irvine",
+   "note": "Campus named in the string; the ROR affiliation API chose the University of California System instead (rejected by the build's more-specific-name check).",
+   "variants": [
+    "Univ. of California, Irvine",
+    "University of California Irvine",
+    "University of California at Irvine",
+    "UC Irvine"
+   ]
+  },
+  {
+   "institution_id": "ror:02t274463",
+   "ror_name": "University of California, Santa Barbara",
+   "note": "UC campus acronym; the ROR affiliation API chose no organization for it.",
+   "variants": [
+    "UCSB",
+    "UC Santa Barbara",
+    "University of California Santa Barbara"
+   ]
+  },
+  {
+   "institution_id": "ror:02mpq6x41",
+   "ror_name": "University of Illinois Chicago",
+   "note": "The ROR affiliation API chose University of Illinois Urbana-Champaign for the misspelled 'Chicaago' variant.",
+   "variants": [
+    "University of Illinois, Chicaago",
+    "University of Illinois at Chicago",
+    "University of Illinois, Chicago"
+   ]
+  },
+  {
+   "institution_id": "ror:035wtm547",
+   "ror_name": "University of Michigan–Dearborn",
+   "note": "Campus named in the string; the ROR affiliation API chose the University of Michigan (Ann Arbor) instead (rejected by the build's more-specific-name check).",
+   "variants": [
+    "University of Michigan, Dearborn",
+    "University of Michigan-Dearborn",
+    "University of Michigan Dearborn"
+   ]
+  },
+  {
+   "institution_id": "ror:032qgrc76",
+   "ror_name": "State University of New York at Potsdam",
+   "note": "Campus named in the string; the ROR affiliation API chose the State University of New York (system) instead (rejected by the build's more-specific-name check).",
+   "variants": [
+    "State University of New York Potsdam",
+    "SUNY Potsdam"
+   ]
+  },
+  {
+   "institution_id": "ror:000fxgx19",
+   "ror_name": "SUNY Polytechnic Institute",
+   "note": "Campus named in the string; the ROR affiliation API chose the State University of New York (system) instead (rejected by the build's more-specific-name check).",
+   "variants": [
+    "State University of New York (SUNY) Polytechnic Institute",
+    "State University of New York Polytechnic Institute"
+   ]
+  },
+  {
+   "institution_id": "ror:02ttsq026",
+   "ror_name": "University of Colorado Boulder",
+   "note": "Campus named in the string; the ROR affiliation API chose the University of Colorado System instead (rejected by the build's more-specific-name check).",
+   "variants": [
+    "University of Colorado at Boulder",
+    "University of Colorado, Boulder"
+   ]
+  },
+  {
+   "institution_id": "ror:0130frc33",
+   "ror_name": "University of North Carolina at Chapel Hill",
+   "note": "Campus named in the string; left unresolved by ROR matching.",
+   "variants": [
+    "University of North Carolina, Chapel Hill",
+    "University of North Carolina Chapel Hill"
+   ]
+  },
+  {
+   "institution_id": "ror:04dawnj30",
+   "ror_name": "University of North Carolina at Charlotte",
+   "note": "Campus named in the string; left unresolved by ROR matching.",
+   "variants": [
+    "University of North Carolina, Charlotte",
+    "University of North Carolina Charlotte"
+   ]
+  },
+  {
+   "institution_id": "ror:04tj63d06",
+   "ror_name": "North Carolina State University",
+   "note": "'NC State' is also a ROR alias of North Central State College (Ohio); in this dataset it means NC State University.",
+   "variants": [
+    "NC State",
+    "North Carolina State University (NC State)"
+   ]
+  },
+  {
+   "institution_id": "ror:04ttjf776",
+   "ror_name": "RMIT University",
+   "note": "The ROR affiliation API chose the unrelated Melbourne Institute of Technology.",
+   "variants": [
+    "Royal Melbourne Institute of Technology (RMIT)",
+    "Royal Melbourne Institute of Technology"
+   ]
+  },
+  {
+   "institution_id": "ror:029pp9z10",
+   "ror_name": "Johns Hopkins University Applied Physics Laboratory",
+   "note": "APL has its own ROR record; the API chose the parent university.",
+   "variants": [
+    "Johns Hopkins University Applied Physics Lab",
+    "Johns Hopkins Applied Physics Laboratory"
+   ]
+  },
+  {
+   "institution_id": "ror:02xfpc920",
+   "ror_name": "Disaster Prevention Research Institute, Kyoto University",
+   "note": "DPRI has its own ROR record; the API chose the parent university.",
+   "variants": [
+    "Disaster Prevention Research Institute (DPRI) Kyoto University",
+    "Disaster Prevention Research Institute, Kyoto University"
+   ]
+  },
+  {
+   "institution_id": "ror:00944ve71",
+   "ror_name": "National Central University",
+   "note": "Taiwan. Its only distinctive token ('central') is a weak token, so the build's ROR gating no longer accepts these variants on its own.",
+   "variants": [
+    "National Central University of Taiwan",
+    "Taiwan National Central University",
+    "National Central University, Taiwan",
+    "National Central University Experimental Center of Civil Engineering",
+    "National Central University of Taiwan Centrifugal Facility"
+   ]
+  },
+  {
+   "institution_id": "ror:05n0gsn30",
+   "ror_name": "Universidad Militar Nueva Granada",
+   "note": "The ROR affiliation API chose an unrelated 'Military University'.",
+   "variants": [
+    "Nueva Granada Military University"
+   ]
+  },
+  {
+   "institution_id": "ror:05jsqgv79",
+   "ror_name": "Water Institute of the Gulf",
+   "note": "The ROR affiliation API chose the unrelated Water Institute (Tanzania).",
+   "variants": [
+    "Water Institute of Gulf"
+   ]
+  },
+  {
+   "institution_id": "ror:01x26mz03",
+   "ror_name": "National Energy Technology Laboratory",
+   "note": "NETL site in Albany, Oregon; its only distinctive token ('energy') is a weak token.",
+   "variants": [
+    "National Energy Technology Laboratory, Albany, OR 97321, USA"
+   ]
+  },
+  {
+   "institution_id": "ror:02hmjzt55",
+   "ror_name": "National Research and Innovation Agency",
+   "note": "Indonesia (BRIN); name tokens are all weak tokens.",
+   "variants": [
+    "National Research and Innovation Agency of Indonesia",
+    "Badan Riset dan Inovasi Nasional"
+   ]
+  },
+  {
+   "institution_id": "ror:05qghxh33",
+   "ror_name": "Stony Brook University",
+   "note": "NSF awardee name (e.g. NSF 2031580); matches ROR record ror:05qghxh33 (checked 2026-11-25).",
+   "variants": [
+    "SUNY at Stony Brook",
+    "Stony Brook"
+   ]
+  }
+ ]
+}

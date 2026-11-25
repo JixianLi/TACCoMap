@@ -1,0 +1,12 @@
+data/raw/
+__pycache__/
+.DS_Store
+data/normalized/
+web/data/
+data/evidence/
+/data/review/
+/publish/
+.claude/
+.env*
+*.log
+*.pkl

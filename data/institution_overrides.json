@@ -1,0 +1,346 @@
+{
+ "ror:0233st365": {
+  "institution_type": "government",
+  "note": "Météo-France: France's national meteorological service, a public administrative body (établissement public administratif) under the Ministry for Ecological Transition; meteofrance.com is not a company site (round-3 review)"
+ },
+ "ror:0068ff141": {
+  "institution_type": "educational",
+  "note": "Méditerranée Infection Foundation: runs IHU Méditerranée Infection; ROR parents Aix-Marseille Université and AP-HM, i.e. a university hospital institute co-run by the university (one reviewer suggested nonprofit; educational follows the university-co-run rule). Commercial via .com was wrong (round-3 review)"
+ },
+ "ror:058bgdt55": {
+  "institution_type": "nonprofit",
+  "note": "Cotton Incorporated: not-for-profit research and marketing company funded by the Cotton Research and Promotion Program checkoff; ROR 'company' and cottoninc.com notwithstanding (round-3 review)"
+ },
+ "ror:02ketev28": {
+  "institution_type": "healthcare",
+  "note": "Texas Oncology: statewide community oncology physician practice (US Oncology Network), a care provider, not an independent research institute (round-3 review)"
+ },
+ "ror:04ptp8872": {
+  "institution_type": "educational",
+  "note": "London Centre for Nanotechnology: joint research centre run by University College London and Imperial College London (university-co-run joint lab); ROR has no parent link (round-3 review)"
+ },
+ "ror:0265w5591": {
+  "institution_type": "commercial",
+  "note": "IBM Research - Thomas J. Watson Research Center: IBM's corporate research headquarters, part of a for-profit company (round-3 review)"
+ },
+ "ror:02js37d36": {
+  "institution_type": "commercial",
+  "note": "IBM Research - Zurich: corporate lab of IBM (ROR parent IBM Watson Research Center) (round-3 review)"
+ },
+ "ror:02441en43": {
+  "institution_type": "commercial",
+  "note": "Honda Research Institute USA: wholly owned research subsidiary of Honda Motor Co. (honda-ri.com), a corporate lab (round-3 review)"
+ },
+ "ror:0583jne22": {
+  "institution_type": "commercial",
+  "note": "Northwest Research Associates (NWRA, Inc.): privately held, employee-owned for-profit research company (nwra.com) (round-3 review)"
+ },
+ "ror:00gqase94": {
+  "institution_type": "healthcare",
+  "note": "AdventHealth: Seventh-day Adventist hospital system, no university parent; ROR types funder/healthcare/nonprofit (round-3 review)"
+ },
+ "ror:012z4f430": {
+  "institution_type": "healthcare",
+  "note": "Baylor Scott & White Research Institute: research arm of Baylor Scott & White Health (ROR parent, healthcare); ROR types healthcare/nonprofit (round-3 review)"
+ },
+ "ror:01px77p81": {
+  "institution_type": "educational",
+  "note": "Sun Yat-sen Memorial Hospital: the Second Affiliated Hospital of Sun Yat-sen University (ROR alternate name), a directly administered university hospital like the already-educational Seventh Affiliated Hospital of SYSU (round-3 review)"
+ },
+ "ror:02754py23": {
+  "institution_type": "nonprofit",
+  "note": "Mercator Ocean International: non-profit French company owned by public agencies (CNRS, Ifremer, IRD, Météo-France, SHOM), now an intergovernmental organisation without a .int site (round-3 review)"
+ },
+ "ror:000tetj79": {
+  "institution_type": "nonprofit",
+  "note": "52°North Spatial Information Research: non-profit (gemeinnützige GmbH) open-source geospatial research company founded with the University of Münster (round-3 review)"
+ },
+ "ror:01k0v6g02": {
+  "institution_type": "nonprofit",
+  "note": "SURFsara: formerly Stichting Academisch Rekencentrum Amsterdam, now part of SURF, the non-profit cooperative of Dutch universities and research institutions (round-3 review)"
+ },
+ "ror:05tcasm11": {
+  "institution_type": "government",
+  "note": "GRNET S.A.: Greece's state-owned national research and education network, supervised by the Ministry of Digital Governance (round-3 review)"
+ },
+ "ror:004zhad81": {
+  "institution_type": "research",
+  "note": "Know Center Research GmbH: Austrian COMET competence research centre (TU Graz key partner), a research institute in GmbH form (round-3 review)"
+ },
+ "ror:02acz2505": {
+  "institution_type": "research",
+  "note": "Cenaero: Belgian private non-profit applied research centre for simulation and HPC, runs Wallonia's Tier-1 supercomputer (round-3 review)"
+ },
+ "ror:03npzn484": {
+  "institution_type": "research",
+  "note": "CorpoGen: Colombian non-profit biotechnology research centre (corpogen.org) (round-3 review)"
+ },
+ "ror:03n6cf849": {
+  "institution_type": "research",
+  "note": "Ricerca sul Sistema Energetico (RSE S.p.A.): wholly owned by the Italian state energy-services company GSE, does mostly publicly funded electrical-system research (comparable to IFPEN, Mintek) (round-3 review)"
+ },
+ "ror:0062dz060": {
+  "institution_type": "research",
+  "note": "Norwich Research Park: science park and research partnership of UEA, John Innes Centre, Quadram, Earlham Institute and NNUH; ROR 'archive' is wrong (round-3 review)"
+ },
+ "name:arup laboratories": {
+  "institution_type": "educational",
+  "note": "ARUP Laboratories: national reference laboratory, a nonprofit enterprise of the University of Utah and its Department of Pathology (university-affiliated unit) (round-3 review)"
+ },
+ "name:academic partnership and engagement experiment apex wright state applied research corporation beavercreek oh 45431 usa": {
+  "institution_type": "educational",
+  "note": "Wright State Applied Research Corporation: nonprofit applied-research affiliate of Wright State University (Wright State Research Institute operates under it) (round-3 review)"
+ },
+ "name:white dwarf research corporation": {
+  "institution_type": "research",
+  "note": "White Dwarf Research Corporation: 501(c)(3) non-profit astrophysics research organization in Golden, CO (typed like Eureka Scientific) (round-3 review)"
+ },
+ "name:white dwarf research corporation golden co 80403 usa": {
+  "institution_type": "research",
+  "note": "White Dwarf Research Corporation (address variant): 501(c)(3) non-profit astrophysics research organization (round-3 review)"
+ },
+ "name:center for solar stellar connections white dwarf research corporation golden co 80403 usa": {
+  "institution_type": "research",
+  "note": "Center for Solar-Stellar Connections, a unit of White Dwarf Research Corporation (501(c)(3) non-profit research organization) (round-3 review)"
+ },
+ "ror:052tfza37": {
+  "institution_type": "nonprofit",
+  "note": "RTI International: independent 501(c)(3) nonprofit research institute; founded by Duke, NC State and UNC but not owned or operated by them (ROR parent links are founders) (round-3 review)"
+ },
+ "ror:01jkd3546": {
+  "institution_type": "research",
+  "note": "P.N. Lebedev Physical Institute: Russian Academy of Sciences institute, not a university; educational only via RAS Physical Sciences Division (gpad.ac.ru matched .ac.xx) (round-3 review)"
+ },
+ "ror:04ryvdf08": {
+  "institution_type": "government",
+  "note": "Space Research Institute (IKI RAS): Russian Academy of Sciences institute; educational only via RAS division .ac.ru chain; own ROR type government (round-3 review)"
+ },
+ "ror:01azrym08": {
+  "institution_type": "research",
+  "note": "M.N. Mikheev Institute of Metal Physics: RAS Ural Branch institute, not a university; educational only via RAS division .ac.ru chain (round-3 review)"
+ },
+ "ror:01whksa54": {
+  "institution_type": "research",
+  "note": "Institute of Astronomy (RAS): Russian Academy of Sciences institute, not a university; educational only via RAS division .ac.ru chain (round-3 review)"
+ },
+ "ror:037styt87": {
+  "institution_type": "research",
+  "note": "Petersburg Nuclear Physics Institute: NRC Kurchatov Institute state research institute (formerly RAS); educational only via RAS division .ac.ru chain (round-3 review)"
+ },
+ "ror:05dkdaa55": {
+  "institution_type": "research",
+  "note": "Ioffe Institute: Ioffe Physical-Technical Institute of RAS, not a university; educational only via RAS division .ac.ru chain (round-3 review)"
+ },
+ "ror:03n15ch10": {
+  "institution_type": "government",
+  "note": "CEA Paris-Saclay: site of the CEA, a French government agency (EPIC); the Université Paris-Saclay parent link is cluster membership, not ownership (round-3 review)"
+ },
+ "ror:01fv25t22": {
+  "institution_type": "government",
+  "note": "CEA Paris-Saclay - Etablissement de Saclay: CEA government agency site; educational only via CEA Paris-Saclay membership link (round-3 review)"
+ },
+ "ror:01ydb3330": {
+  "institution_type": "research",
+  "note": "Synchrotron SOLEIL: national synchrotron, société civile owned by CNRS (72%) and CEA (28%); no university owns or co-runs it (round-3 review)"
+ },
+ "ror:02skytd81": {
+  "institution_type": "research",
+  "note": "IMDEA Nanoscience: public foundation of the Comunidad de Madrid; parent 'Madrid Institute for Advanced Studies' is a regional-government foundation network, not a university (round-3 review)"
+ },
+ "ror:05558nw16": {
+  "institution_type": "research",
+  "note": "Leibniz Supercomputing Centre: institute of the Bavarian Academy of Sciences and Humanities (a learned academy, not a university); not run by the Munich universities (round-3 review)"
+ },
+ "ror:040bb7493": {
+  "institution_type": "research",
+  "note": "Biodiversity Research Center, Academia Sinica: research center of Taiwan's national academy; Academia Sinica is educational only via sinica.edu.tw (round-3 review)"
+ },
+ "ror:01egwg173": {
+  "institution_type": "government",
+  "note": "UK Astronomy Technology Centre: part of STFC (UK Research and Innovation), a government research council; not a University of Edinburgh unit (roe.ac.uk is the site domain) (round-3 review)"
+ },
+ "ror:04b6nzv94": {
+  "institution_type": "healthcare",
+  "note": "Brigham and Women's Hospital: owned by Mass General Brigham, an independent nonprofit health system; the ROR Tufts parent link is wrong (Harvard teaching affiliate, not university-owned) (round-3 review)"
+ },
+ "ror:04r33pf22": {
+  "institution_type": "healthcare",
+  "note": "Guy's Hospital: NHS hospital (Guy's and St Thomas' NHS Foundation Trust); educational only via 'King's College Hospital NHS Foundation Trust' name match (round-3 review)"
+ },
+ "ror:04t2rv460": {
+  "institution_type": "healthcare",
+  "note": "Danbury Hospital: part of Nuvance Health; educational only via Northwell Health's northwell.edu domain; no university owns it (round-3 review)"
+ },
+ "ror:015yf2b46": {
+  "institution_type": "healthcare",
+  "note": "Dell Children's Medical Center of Central Texas: owned and operated by Ascension Seton (Catholic nonprofit health system); Dell Med teaching affiliate, not a UT Austin unit (round-3 review)"
+ },
+ "ror:05twjp994": {
+  "institution_type": "research",
+  "note": "Gregor Mendel Institute: Austrian Academy of Sciences institute, not a university; educational only via .ac.xx (gmi.oeaw.ac.at) (round-3 review)"
+ },
+ "ror:011hecd67": {
+  "institution_type": "research",
+  "note": "National Center for Gene Research: Chinese Academy of Sciences institute with a Shanghai government parent, no university parent; educational only via .ac.xx (ncgr.ac.cn) (round-3 review)"
+ },
+ "ror:00fwdyt59": {
+  "institution_type": "healthcare",
+  "note": "George Washington University Hospital: majority-owned (80%) and operated by Universal Health Services (for-profit hospital company), GWU holds a minority stake; a teaching affiliate, not university-operated (round-4 teaching-affiliate rule)"
+ },
+ "ror:04ehecz88": {
+  "institution_type": "healthcare",
+  "note": "University of Pittsburgh Medical Center (UPMC): independent nonprofit health system, legally separate from the University of Pittsburgh; Pitt's academic medical partner, not university-owned (round-4 teaching-affiliate rule)"
+ },
+ "ror:024vfsp92": {
+  "institution_type": "healthcare",
+  "note": "UPMC Presbyterian: UPMC hospital (ROR parent UPMC), owned by the independent nonprofit UPMC, not the University of Pittsburgh (round-4 teaching-affiliate rule)"
+ },
+ "ror:03763ep67": {
+  "institution_type": "healthcare",
+  "note": "Children's Hospital of Pittsburgh: UPMC hospital (ROR parent UPMC); educational only via its chp.edu domain; owned by the independent nonprofit UPMC, not the University of Pittsburgh (round-4 teaching-affiliate rule)"
+ },
+ "ror:05bpbnx46": {
+  "institution_type": "healthcare",
+  "note": "Copenhagen University Hospital: the hospitals of the Capital Region of Denmark (Region Hovedstaden), a regional government; University of Copenhagen teaching affiliate, not university-owned (round-4 teaching-affiliate rule)"
+ },
+ "ror:03mchdq19": {
+  "institution_type": "healthcare",
+  "note": "Rigshospitalet: owned and operated by the Capital Region of Denmark (ROR parent Copenhagen University Hospital); University of Copenhagen teaching affiliate, not university-owned (round-4 teaching-affiliate rule)"
+ },
+ "ror:00td68a17": {
+  "institution_type": "healthcare",
+  "note": "Bispebjerg Hospital: owned and operated by the Capital Region of Denmark (ROR parent Copenhagen University Hospital); teaching affiliate, not university-owned (round-4 teaching-affiliate rule)"
+ },
+ "ror:00kzzgw26": {
+  "institution_type": "healthcare",
+  "note": "Kennedy Center: genetics centre of Rigshospitalet, Capital Region of Denmark (ROR parent Copenhagen University Hospital); not university-owned (round-4 teaching-affiliate rule)"
+ },
+ "ror:00ey0ed83": {
+  "institution_type": "healthcare",
+  "note": "Odense University Hospital: owned and operated by the Region of Southern Denmark (Region Syddanmark); University of Southern Denmark teaching affiliate, not university-owned (round-4 teaching-affiliate rule)"
+ },
+ "ror:042xt5161": {
+  "institution_type": "healthcare",
+  "note": "University Health Network (Toronto): Ontario public hospital corporation; University of Toronto teaching affiliate, not university-owned (round-4 teaching-affiliate rule)"
+ },
+ "ror:03zayce58": {
+  "institution_type": "healthcare",
+  "note": "Princess Margaret Cancer Centre: part of University Health Network (ROR parent), an Ontario public hospital corporation; University of Toronto teaching affiliate, not university-owned (round-4 teaching-affiliate rule)"
+ },
+ "ror:01aaptx40": {
+  "institution_type": "healthcare",
+  "note": "Indiana University Health: private nonprofit health system (formerly Clarian Health), legally separate from Indiana University; teaching affiliate; its ROR parent link to Indiana University is an affiliation, not ownership (round-4 teaching-affiliate rule)"
+ },
+ "ror:05rbkcx47": {
+  "institution_type": "healthcare",
+  "note": "Indiana University Hospital: owned and operated by IU Health (ROR parent), a private nonprofit separate from Indiana University; teaching affiliate (round-4 teaching-affiliate rule)"
+ },
+ "ror:03vzvbw58": {
+  "institution_type": "healthcare",
+  "note": "Riley Hospital for Children: owned and operated by IU Health (ROR parent), a private nonprofit separate from Indiana University; teaching affiliate (round-4 teaching-affiliate rule)"
+ },
+ "ror:05dq2gs74": {
+  "institution_type": "healthcare",
+  "note": "Vanderbilt University Medical Center: independent nonprofit legally and financially separated from Vanderbilt University on 30 April 2016 (news.vumc.org); the School of Medicine remains with the university (round-4 teaching-affiliate rule)"
+ },
+ "ror:01z7r7q48": {
+  "institution_type": "healthcare",
+  "note": "Children's Hospital of Philadelphia: independent nonprofit hospital, University of Pennsylvania teaching affiliate; educational only via its chop.edu domain (round-4 teaching-affiliate rule)"
+ },
+ "ror:0130jk839": {
+  "institution_type": "healthcare",
+  "note": "University Hospitals of Cleveland: independent nonprofit health system, Case Western Reserve University teaching affiliate, not university-owned (round-4 teaching-affiliate rule)"
+ },
+ "ror:00j9c2840": {
+  "institution_type": "healthcare",
+  "note": "Oslo University Hospital: Norwegian state hospital trust under the South-Eastern Norway Regional Health Authority (Helse Sør-Øst RHF); University of Oslo teaching affiliate, not university-owned (round-4 teaching-affiliate rule)"
+ },
+ "ror:030v5kp38": {
+  "institution_type": "healthcare",
+  "note": "University Hospital of North Norway: Norwegian state hospital trust under the Northern Norway Regional Health Authority (Helse Nord RHF, its ROR parent); UiT The Arctic University of Norway teaching affiliate, not university-owned (round-4 teaching-affiliate rule)"
+ },
+ "ror:00epner96": {
+  "institution_type": "healthcare",
+  "note": "Bellvitge University Hospital: public hospital of the Institut Català de la Salut (Catalan health service); University of Barcelona teaching affiliate, not university-owned (round-4 teaching-affiliate rule)"
+ },
+ "ror:03ba28x55": {
+  "institution_type": "healthcare",
+  "note": "Vall d'Hebron Hospital Universitari: public hospital of the Institut Català de la Salut (Catalan health service); Autonomous University of Barcelona teaching affiliate, not university-owned (round-4 teaching-affiliate rule)"
+ },
+ "ror:005a3p084": {
+  "institution_type": "healthcare",
+  "note": "Hospital Universitario Nuestra Señora de Candelaria: public hospital of the Servicio Canario de la Salud (Canary Islands health service); teaching affiliate, not university-owned (round-4 teaching-affiliate rule)"
+ },
+ "ror:03zcpvf19": {
+  "institution_type": "healthcare",
+  "note": "University Hospitals of the Ruhr-University of Bochum (UK RUB): network of hospitals run by separate operators (Bergmannsheil, Knappschaft, St. Elisabeth Gruppe, ...) under the 'Bochum model'; Ruhr-Universität Bochum owns no hospital (round-4 teaching-affiliate rule)"
+ },
+ "ror:004h6mc53": {
+  "institution_type": "healthcare",
+  "note": "Universitätsklinik Marien Hospital Herne: Catholic hospital of the St. Elisabeth Gruppe, member of the UK RUB teaching network (ROR parent), not owned by Ruhr-Universität Bochum (round-4 teaching-affiliate rule)"
+ },
+ "ror:04cpxjv19": {
+  "institution_type": "healthcare",
+  "note": "McGill University Health Centre: Quebec public health establishment (Act respecting health services and social services); McGill teaching affiliate, ROR parent McGill is an affiliation link (round-4 teaching-affiliate rule)"
+ },
+ "ror:04pemf943": {
+  "institution_type": "healthcare",
+  "note": "Research Institute of the McGill University Health Centre: research arm of the MUHC (ROR parent), a Quebec public health establishment, not McGill-owned (round-4 teaching-affiliate rule)"
+ },
+ "ror:0410a8y51": {
+  "institution_type": "healthcare",
+  "note": "Centre Hospitalier de l'Université de Montréal (CHUM): Quebec public health establishment; Université de Montréal teaching affiliate, not university-owned (round-4 teaching-affiliate rule)"
+ },
+ "ror:04rgqcd02": {
+  "institution_type": "healthcare",
+  "note": "Centre de recherche du CHU de Québec-Université Laval: research centre of the CHU de Québec, a Quebec public health establishment; Université Laval teaching affiliate, not university-owned (round-4 teaching-affiliate rule)"
+ },
+ "ror:05dk2r620": {
+  "institution_type": "healthcare",
+  "note": "Douglas Mental Health University Institute: part of the CIUSSS de l'Ouest-de-l'Île-de-Montréal, a Quebec public health establishment; McGill teaching affiliate, not university-owned (round-4 teaching-affiliate rule)"
+ },
+ "ror:031z68d90": {
+  "institution_type": "healthcare",
+  "note": "Institut Universitaire de Gériatrie de Montréal: part of the CIUSSS du Centre-Sud-de-l'Île-de-Montréal, a Quebec public health establishment; Université de Montréal affiliate, not university-owned (round-4 teaching-affiliate rule)"
+ },
+ "ror:05a353079": {
+  "institution_type": "healthcare",
+  "note": "Centre Hospitalier Universitaire Vaudois (CHUV): cantonal hospital run by the Canton of Vaud (Département de la santé et de l'action sociale); University of Lausanne teaching affiliate, not university-owned (round-4 teaching-affiliate rule)"
+ },
+ "ror:04k51q396": {
+  "institution_type": "healthcare",
+  "note": "University Hospital of Basel: independent public-law institution of the Canton of Basel-Stadt (since 2012); University of Basel teaching affiliate, not university-owned (round-4 teaching-affiliate rule)"
+ },
+ "ror:035vb3h42": {
+  "institution_type": "healthcare",
+  "note": "University Children's Hospital Zurich (Kinderspital): owned by the private Eleonorenstiftung foundation; University of Zurich teaching affiliate, not university-owned (round-4 teaching-affiliate rule)"
+ },
+ "ror:05ghs6f64": {
+  "institution_type": "educational",
+  "note": "Montreal Neurological Institute and Hospital (The Neuro): the Institute is a McGill University research and teaching unit (site mcgill.ca/neuro); its ROR parent is the MUHC hospital side, now healthcare, so this keeps its previous educational type rather than inheriting via the hospital (round-4 teaching-affiliate rule)"
+ },
+ "ror:035xp3j14": {
+  "institution_type": "educational",
+  "note": "McConnell Brain Imaging Centre: McGill research facility within The Neuro; kept educational so it does not fall through to 'research' after the MUHC healthcare override (round-4 teaching-affiliate rule)"
+ },
+ "ror:01zcpa714": {
+  "institution_type": "educational",
+  "note": "Michigan Medicine: the University of Michigan's own academic medical center (umbrella for University of Michigan Health and the U-M Medical School, part of the university; branding.med.umich.edu); university-owned, so the teaching-affiliate rule does not apply (round-4 audit)"
+ },
+ "ror:02kzs4y22": {
+  "institution_type": "educational",
+  "note": "UConn Health: the University of Connecticut Health Center, a state-owned part of the University of Connecticut including the medical and dental schools and John Dempsey Hospital, which the university's financial statements describe as 'a separate, identifiable unit of the University of Connecticut Health Center'; university-owned (round-4 audit)"
+ },
+ "ror:01rq8ck58": {
+  "institution_type": "educational",
+  "note": "Keck Hospital of USC: formerly USC University Hospital, bought from Tenet Healthcare by the University of Southern California in 2009 and owned by USC since (hscnews.usc.edu); university-owned (round-4 audit)"
+ },
+ "ror:005dvqh91": {
+  "institution_type": "educational",
+  "note": "NYU Langone Health: NYU is sole corporate member of NYU Langone Health System, which is sole member of NYU Langone Hospitals; includes NYU Grossman School of Medicine (nyulangone.org annual/quarterly reports); university-owned (round-4 audit)"
+ },
+ "ror:01z4nnt86": {
+  "institution_type": "healthcare",
+  "note": "Seoul National University Hospital: since 15 July 1978 a special corporation created by the SNUH Establishment Act, separate from Seoul National University (snuh.org history); its ROR parent SNU is an affiliation, not ownership (round-4 teaching-affiliate rule)"
+ }
+}
