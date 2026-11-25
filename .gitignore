@@ -10,3 +10,4 @@ data/evidence/
 .env*
 *.log
 *.pkl
+.venv/

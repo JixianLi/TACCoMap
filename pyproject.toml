@@ -1,0 +1,6 @@
+[project]
+name = "taccomap"
+version = "0.1.0"
+description = "Map of TACC collaborations from public data sources (stdlib-only harvesters and build; static browser)"
+requires-python = ">=3.13"
+dependencies = []

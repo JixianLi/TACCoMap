@@ -135,10 +135,13 @@ Maintainer-only outputs of `build.py` (`--review-directory DIR` writes them else
 ## Publishing guard (`harvest/check_publishable.py`)
 
 Stdlib-only check that fails (exit 1) on anything that must stay local. Matches are reported by location and count only, never by value, so the output is safe to share.
-- `python3 harvest/check_publishable.py`: tracked plus untracked-not-ignored files, plus everything under `web/`.
-- `python3 harvest/check_publishable.py PATH ...`: the given files or folders, recursively.
-- `python3 harvest/check_publishable.py --staged`: the index copies of staged files (what will actually be committed).
-- `python3 harvest/check_publishable.py --site DIR`: a staged GitHub Pages folder; fails on any file outside the allowlist (`index.html`, `style.css`, `app.js`, `data.js`, `data/{meta,papers,awards,datasets,allocations,funding_opportunities,people,institutions}.json`) and on any allowlisted file that is missing, then runs every content check.
+- Structural gates on published collaboration files: a participant whose listed affiliation is a secondary school
+  may carry only `name_as_listed`, `institution_id`, `institution_name_as_listed`, `institution_status` and a null
+  `person_id`; titles and descriptions may not hold coordinates finer than two decimals.
+- `uv run python harvest/check_publishable.py`: tracked plus untracked-not-ignored files, plus everything under `web/`.
+- `uv run python harvest/check_publishable.py PATH ...`: the given files or folders, recursively.
+- `uv run python harvest/check_publishable.py --staged`: the index copies of staged files (what will actually be committed).
+- `uv run python harvest/check_publishable.py --site DIR`: a staged GitHub Pages folder; fails on any file outside the allowlist (`index.html`, `style.css`, `app.js`, `data.js`, `data/{meta,papers,awards,datasets,allocations,funding_opportunities,people,institutions}.json`) and on any allowlisted file that is missing, then runs every content check.
 
 Checks: paths under `data/raw/`, `data/evidence/`, `data/normalized/`, `data/review/` or a publish staging folder (`publish/`, …); any `person_merge_log*.json`; files over 45,000,000 bytes; emails (plain and obfuscated), mailto links, phone numbers; personal social-media profile URLs; the ORCID QA field names as JSON keys; person-note wording in person files (`data/manual/person*.json`, `people.json`); local absolute paths (`/Users/`, `/home/`, `/private/`); and occurrences of `$OPENALEX_API_KEY` when it is set in the environment (count only). GitHub repository links are not flagged.
 

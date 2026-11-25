@@ -4,6 +4,7 @@ import argparse
 import collections
 import json
 import pathlib
+import re
 import sys
 
 import build_awards
@@ -267,6 +268,67 @@ def write_person_merge_log(review_directory, merge_log, refused_merges, stripped
 DIRECT_RELATIONSHIP_TYPES = {"staff_coauthor", "tacc_lead_award", "tacc_partner_award", "tacc_resource_allocation"}
 
 
+# Potential minors (maintainer decision, 2026-11-25): anyone listed at a secondary school on any record is published
+# only as a name and that institution - no person page, person id, role, evidence or other affiliations - and the
+# listed affiliation is cut to the school's own part (no street, town or postcode).
+SECONDARY_SCHOOL_PATTERN = re.compile(
+    r"\bhigh\s+school\b|\bsecondary\s+school\b|\bmiddle\s+school\b|\bjunior\s+high\b|\bindependent\s+school\s+district\b|"
+    r"\bISD\b|\bprep(?:aratory)?\s+school\b|\bgymnasium\b|\blyc[ée]e\b|\bscience\s+academy\b|\bthacher\s+school\b",
+    re.IGNORECASE)
+POTENTIAL_MINOR_PARTICIPANT_FIELDS = ("name_as_listed", "institution_id", "institution_name_as_listed", "institution_status")
+# DesignSafe and other dataset descriptions can give a private site (e.g. a house roof) to the arc-second; the
+# published text keeps two decimals (about 1 km).
+# Only numbers that are clearly coordinates are rounded (a degree sign, a lat/long label, or a pair right after a
+# GPS/coordinates/location word), so measurement lists like "0.443, 0.512" stay intact.
+DECIMAL_DEGREES_PATTERN = re.compile(r"-?\d{1,3}\.\d{3,}(?=\s*°)")
+LABELLED_COORDINATE_PATTERN = re.compile(r"(\b(?:lat(?:itude)?|lon(?:g(?:itude)?)?|lng)\b\s*[:=]?\s*)(-?\d{1,3}\.\d{3,})",
+                                         re.IGNORECASE)
+CONTEXT_COORDINATE_PAIR_PATTERN = re.compile(
+    r"(\b(?:gps|coordinates?|location|loc|position|lat(?:itude)?|long(?:itude)?)\b[^.\n]{0,40}?)(-?\d{1,3}\.\d{3,})(\s*,\s*)"
+    r"(-?\d{1,3}\.\d{3,})",
+    re.IGNORECASE)
+DMS_COORDINATE_PATTERN = re.compile(
+    r"(\d{1,3})\s*°\s*(\d{1,2})\s*['′]\s*(\d{1,2}(?:\.\d+)?)\s*(?:\"|″|'')?\s*([NSEW])")
+COORDINATE_TEXT_FIELDS = ("title", "description")
+
+
+def round_coordinates(text):
+    text = DMS_COORDINATE_PATTERN.sub(
+        lambda match: f"{int(match[1]) + int(match[2]) / 60 + float(match[3]) / 3600:.2f}°{match[4]}", text)
+    text = DECIMAL_DEGREES_PATTERN.sub(lambda match: f"{float(match[0]):.2f}", text)
+    text = CONTEXT_COORDINATE_PAIR_PATTERN.sub(
+        lambda match: f"{match[1]}{float(match[2]):.2f}{match[3]}{float(match[4]):.2f}", text)
+    return LABELLED_COORDINATE_PATTERN.sub(lambda match: f"{match[1]}{float(match[2]):.2f}", text)
+
+
+def participant_institution_names(participant, institutions):
+    institution_ids = [participant.get("institution_id")] + list(participant.get("additional_institution_ids") or [])
+    return [participant.get("institution_name_as_listed") or ""] + [
+        (institutions.get(institution_id) or {}).get("name") or "" for institution_id in institution_ids if institution_id]
+
+
+def is_potential_minor_participant(participant, institutions):
+    return any(SECONDARY_SCHOOL_PATTERN.search(name) for name in participant_institution_names(participant, institutions))
+
+
+def potential_minor_ids(collaborations, institutions):
+    return {participant["person_id"] for collaboration in collaborations.values()
+            for participant in collaboration.get("participants") or []
+            if participant.get("person_id") and is_potential_minor_participant(participant, institutions)}
+
+
+def school_part(listed_affiliation):
+    parts = [part.strip() for part in re.split(r"[,;]", listed_affiliation or "") if part.strip()]
+    return next((part for part in parts if SECONDARY_SCHOOL_PATTERN.search(part)), None)
+
+
+def potential_minor_participant(participant):
+    published = {field: participant.get(field) for field in POTENTIAL_MINOR_PARTICIPANT_FIELDS}
+    published["person_id"] = None
+    published["institution_name_as_listed"] = school_part(participant.get("institution_name_as_listed"))
+    return published
+
+
 def direct_collaborator_ids(collaborations):
     return {participant["person_id"] for collaboration in collaborations.values()
             if DIRECT_RELATIONSHIP_TYPES & set(collaboration.get("relationship_types") or [])
@@ -287,7 +349,9 @@ def is_published_participant_field(participant, field, value, direct_ids):
     return field not in UNPUBLISHED_PARTICIPANT_FIELDS
 
 
-def published_participant(participant, direct_ids):
+def published_participant(participant, direct_ids, minor_ids, institutions):
+    if participant.get("person_id") in minor_ids or is_potential_minor_participant(participant, institutions):
+        return potential_minor_participant(participant)
     published = {field: value for field, value in participant.items()
                  if is_published_participant_field(participant, field, value, direct_ids)}
     if participant.get("person_id") not in direct_ids:
@@ -295,9 +359,13 @@ def published_participant(participant, direct_ids):
     return published
 
 
-def published_collaboration(collaboration, direct_ids):
-    return {**collaboration, "participants": [published_participant(participant, direct_ids)
-                                              for participant in collaboration.get("participants") or []]}
+def published_collaboration(collaboration, direct_ids, minor_ids, institutions):
+    published = {**collaboration, "participants": [published_participant(participant, direct_ids, minor_ids, institutions)
+                                                   for participant in collaboration.get("participants") or []]}
+    for field in COORDINATE_TEXT_FIELDS:
+        if published.get(field):
+            published[field] = round_coordinates(published[field])
+    return published
 
 
 def write_review_outputs(review_directory, output_directory, people, merge_log, refused_merges, stripped_orcids):
@@ -332,12 +400,14 @@ def write_outputs(output_directory, documents, collaborations, people, instituti
     output_directory = pathlib.Path(output_directory)
     output_directory.mkdir(parents=True, exist_ok=True)
     records_by_file = {file_name: [] for file_name in dict.fromkeys(KIND_TO_OUTPUT_FILE.values())}
-    direct_ids = direct_collaborator_ids(collaborations)
+    minor_ids = potential_minor_ids(collaborations, institutions)
+    direct_ids = direct_collaborator_ids(collaborations) - minor_ids
+    print(f"\npotential minors (secondary-school affiliation) published as name + institution only: {len(minor_ids)} people")
     unknown_kinds = collections.Counter()
     for collaboration in collaborations.values():
         file_name = KIND_TO_OUTPUT_FILE.get(collaboration.get("kind"))
         if file_name:
-            records_by_file[file_name].append(published_collaboration(collaboration, direct_ids))
+            records_by_file[file_name].append(published_collaboration(collaboration, direct_ids, minor_ids, institutions))
         else:
             unknown_kinds[collaboration.get("kind")] += 1
     if unknown_kinds:

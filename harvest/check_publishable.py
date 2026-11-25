@@ -12,11 +12,14 @@ so the output itself is safe to paste into an issue or a chat.
 
 import argparse
 import fnmatch
+import json
 import os
 import pathlib
 import re
 import subprocess
 import sys
+
+import build
 
 PROJECT_ROOT = pathlib.Path(__file__).resolve().parent.parent
 
@@ -173,6 +176,37 @@ def content_failures(relative_path, text, api_key):
     return failures
 
 
+def published_record_failures(relative_path, text):
+    """Structural gates on the published collaboration files: a participant listed at a secondary school (a potential
+    minor) carries only a name and that institution, and descriptions carry no coordinate finer than two decimals."""
+    if not fnmatch.fnmatch(relative_path, "*data/*.json") or relative_path.endswith(("people.json", "institutions.json",
+                                                                                    "meta.json")):
+        return []
+    try:
+        records = json.loads(text)
+    except json.JSONDecodeError:
+        return []
+    if not isinstance(records, list):
+        return []
+    allowed_minor_fields = set(build.POTENTIAL_MINOR_PARTICIPANT_FIELDS) | {"person_id"}
+    minor_rows = precise_coordinates = 0
+    for record in records:
+        if not isinstance(record, dict):
+            continue
+        for participant in record.get("participants") or []:
+            if build.SECONDARY_SCHOOL_PATTERN.search(participant.get("institution_name_as_listed") or "") and (
+                    participant.get("person_id") or set(participant) - allowed_minor_fields):
+                minor_rows += 1
+        precise_coordinates += sum(1 for field in build.COORDINATE_TEXT_FIELDS
+                                   if record.get(field) and build.round_coordinates(record[field]) != record[field])
+    failures = []
+    if minor_rows:
+        failures.append(f"potential-minor participant with more than name and institution: {minor_rows} row(s)")
+    if precise_coordinates:
+        failures.append(f"coordinates finer than two decimals in title/description: {precise_coordinates} record(s)")
+    return failures
+
+
 def site_allowlist_failures(relative_paths):
     failures = [f"{path}: not in site allowlist" for path in sorted(set(relative_paths) - SITE_ALLOWLIST)]
     failures += [f"{path}: missing from staged site" for path in sorted(SITE_ALLOWLIST - set(relative_paths))]
@@ -198,7 +232,8 @@ def main():
     for relative_path, read_bytes in candidates:
         content = read_bytes()
         text = content.decode("utf-8", errors="replace")
-        for failure in path_failures(relative_path, len(content)) + content_failures(relative_path, text, api_key):
+        for failure in path_failures(relative_path, len(content)) + content_failures(relative_path, text, api_key) + published_record_failures(
+                relative_path, text):
             failures.append(f"{relative_path}: {failure}")
 
     for failure in failures:

@@ -9,31 +9,32 @@ harvest/<source>.py  ->  data/normalized/<source>.json  ->  harvest/build.py  ->
 ```
 
 The data contract is `SCHEMA.md`; project rules are in `CLAUDE.md`. Everything is Python 3 standard library and
-plain browser JavaScript, so there is nothing to install.
+plain browser JavaScript, so there are no dependencies to install. The project Python is pinned with uv
+(`.python-version`, `pyproject.toml`): run `uv sync` once, then use `uv run python …` as below.
 
 ## Running
 
 ```sh
 # 1. Harvest (each writes data/normalized/<source>.json; raw API responses are cached in data/raw/<source>/)
-python3 harvest/openalex.py          # optional: export OPENALEX_API_KEY=... (see gaps below)
-python3 harvest/nsf.py
-python3 harvest/usaspending.py       # needs nsf.json first
-python3 harvest/nih.py
-python3 harvest/datacite.py
-python3 harvest/access_allocations.py
-python3 harvest/grants_gov.py
-python3 harvest/affiliation_evidence.py  # needs nsf.json/nih.json/usaspending.json and OPENALEX_API_KEY; dated PI/co-PI affiliations
-python3 harvest/orcid_names.py           # after affiliation_evidence.py; ~22.5k ORCIDs (~40 min first time, cached, resumable);
+uv run python harvest/openalex.py          # optional: export OPENALEX_API_KEY=... (see gaps below)
+uv run python harvest/nsf.py
+uv run python harvest/usaspending.py       # needs nsf.json first
+uv run python harvest/nih.py
+uv run python harvest/datacite.py
+uv run python harvest/access_allocations.py
+uv run python harvest/grants_gov.py
+uv run python harvest/affiliation_evidence.py  # needs nsf.json/nih.json/usaspending.json and OPENALEX_API_KEY; dated PI/co-PI affiliations
+uv run python harvest/orcid_names.py           # after affiliation_evidence.py; ~22.5k ORCIDs (~40 min first time, cached, resumable);
                                          # rerun before build.py whenever build_people.py's hard-evidence rules change (cached: seconds)
 
 # 2. Build: merge sources, match free-text institutions to ROR, classify institutions, write web/data/
-python3 harvest/build.py                       # first run makes ~3k ROR API calls (~45 min); cached afterwards
-python3 harvest/build.py --skip-ror-matching   # fast, offline-ish build (not for a published site)
+uv run python harvest/build.py                       # first run makes ~3k ROR API calls (~45 min); cached afterwards
+uv run python harvest/build.py --skip-ror-matching   # fast, offline-ish build (not for a published site)
 # maintainer-only outputs (merge log, full person records) go to data/review/ (gitignored, never published);
 # --review-directory DIR writes them elsewhere
 
 # 3. Serve the browser
-python3 -m http.server -d web 8000             # open http://localhost:8000
+uv run python -m http.server -d web 8000             # open http://localhost:8000
 ```
 
 Re-running a harvester is cheap because responses are cached; delete `data/raw/<source>/` to force a refresh.
@@ -44,8 +45,8 @@ Before committing or publishing, run the publish guard (details in `SCHEMA.md`, 
 
 ```sh
 sh scripts/install_hooks.sh                          # once: pre-commit hook running the guard on staged files
-python3 harvest/check_publishable.py                 # tracked + untracked-not-ignored files, plus web/
-python3 harvest/check_publishable.py --site DIR      # a staged GitHub Pages folder (allowlist + content checks)
+uv run python harvest/check_publishable.py                 # tracked + untracked-not-ignored files, plus web/
+uv run python harvest/check_publishable.py --site DIR      # a staged GitHub Pages folder (allowlist + content checks)
 ```
 
 Institutions are handled in `harvest/build_institutions.py` (called from `build.py`):
@@ -235,6 +236,15 @@ with a TACC-affiliated author, PIs/co-PIs of TACC-led or TACC-partner awards, an
 (authors who only acknowledged TACC resources, creators of datasets hosted at TACC, PIs of awards that only
 mention TACC) appears only as a name on each record, with no person id in the published files, so their records
 are not linked into a profile.
+
+**Potential minors.** Anyone listed at a secondary school (high school, secondary or middle school, school
+district, preparatory school, gymnasium, lycée, …) on any record is treated as a potential minor: on every record
+they appear only as their listed name and the school (the school part of the affiliation, without town or
+postcode). No person page, person id, role, evidence or other affiliation is published for them, and
+`check_publishable.py` fails if a published record shows more.
+
+**Coordinates in descriptions.** Coordinates in record titles and descriptions (for example a dataset's sensor
+site) are rounded to two decimals (about 1 km) in the published files.
 
 **What is not published.** Email addresses and phone numbers (never stored); personal addresses and GPS
 coordinates listed as affiliations (`[address removed]`) and common street-level patterns in affiliations; the person merge
