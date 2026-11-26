@@ -20,6 +20,10 @@ export interface PartnerEdge {
     sharedCollaborations: number;
 }
 
+// Shown only when turned on: allocations outnumber every other kind of direct collaboration several times over, so
+// with them on, the map mostly shows who computed at TACC.
+const HIDDEN_BY_DEFAULT_RELATIONSHIP_TYPES = new Set(["tacc_resource_allocation"]);
+
 export class CollaborationMapGlobalContext implements GlobalContext {
     dataUrl = "data/map_institutions.json";
     recordsUrl = "data/map_records.json";
@@ -54,7 +58,8 @@ export class CollaborationMapGlobalContext implements GlobalContext {
             const data = await loadMapAggregate(this.dataUrl);
             runInAction(() => {
                 this.data = data;
-                this.enabledRelationshipTypes = new Set(data.direct_relationship_types);
+                this.enabledRelationshipTypes = new Set(data.direct_relationship_types
+                    .filter(relationshipType => !HIDDEN_BY_DEFAULT_RELATIONSHIP_TYPES.has(relationshipType)));
                 this.enabledInstitutionTypes = new Set(data.institutions.map(institution => institution.institution_type));
                 this.yearRange = [this.years[0], this.years[this.years.length - 1]];
             });
