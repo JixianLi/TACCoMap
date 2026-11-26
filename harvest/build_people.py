@@ -1085,7 +1085,8 @@ def is_initials_only(name):
 
 
 def is_large_collaboration(collaboration):
-    return collaboration.get("kind") == "paper" and (
+    """OpenAlex author lists (papers, and works OpenAlex types as datasets) that are truncated or very long."""
+    return any(source["source"] == "openalex" for source in collaboration.get("sources") or []) and (
         bool(collaboration.get("participants_truncated"))
         or len(collaboration.get("participants") or []) >= LARGE_COLLABORATION_AUTHOR_COUNT)
 

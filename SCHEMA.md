@@ -17,7 +17,7 @@ Maintainer-only build outputs go to `data/review/` (gitignored, never published;
 | field | notes |
 |---|---|
 | `id` | `paper:doi:<lowercased doi>` (fallback `paper:openalex:W…`), `award:<funder>:<award number>`, `subaward:usaspending:<prime award id>:<sub-award id>:<action date>:<amount>` (one per FFATA report; rows identical in all four parts get an ordinal suffix `:2`, `:3`, …), `dataset:doi:<doi>`, `allocation:<project number>` (the XSEDE grant number or ACCESS request number: a project continued from XSEDE into ACCESS keeps its number, so its records from both sources merge; its span is the earliest start to the latest end), `opportunity:grantsgov:<id>` |
-| `kind` | `paper` \| `award` \| `subaward` \| `dataset` \| `allocation` \| `funding_opportunity` |
+| `kind` | `paper` \| `award` \| `subaward` \| `dataset` \| `allocation` \| `funding_opportunity`. An OpenAlex work is a `dataset` when OpenAlex types it `dataset` or `software` (kept as `openalex_type`), else a `paper`. A DOI from both OpenAlex and DataCite is one record (build.py), its kind from DataCite's `resource_type`: Text, Preprint, JournalArticle, ConferencePaper, Report and other text types make a `paper`, anything else a `dataset` |
 | `relationship_types` | list; values below. A record can have several (e.g. staff co-authored AND acknowledges TACC) |
 | `title`, `year`, `start_date`, `end_date` | dates ISO `YYYY-MM-DD` or null |
 | `amount_usd`, `funder`, `venue`, `url`, `description` | optional, null if unknown |

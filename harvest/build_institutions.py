@@ -833,7 +833,9 @@ def remove_bulk_affiliations(collaborations, institutions):
     links_by_share_band = collections.Counter()
     for collaboration in collaborations.values():
         participants = collaboration.get("participants") or []
-        if collaboration.get("kind") != "paper" or len(participants) < BULK_AFFILIATION_MIN_PARTICIPANTS:
+        # An OpenAlex authorship quirk: applies to every record with OpenAlex authorships, papers or datasets.
+        from_openalex = any(source["source"] == "openalex" for source in collaboration.get("sources") or [])
+        if not from_openalex or len(participants) < BULK_AFFILIATION_MIN_PARTICIPANTS:
             continue
         holder_counts = collections.Counter(
             institution_id for participant in participants

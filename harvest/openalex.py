@@ -20,7 +20,10 @@ API_BASE = "https://api.openalex.org"
 TACC_PHRASE = "Texas Advanced Computing Center"
 TACC_AFFILIATION_PATTERN = re.compile(r"texas advanced computing cent|\bTACC\b", re.IGNORECASE)
 WORK_FIELDS = ("id,doi,title,publication_year,publication_date,primary_location,"
-               "authorships,is_authors_truncated")
+               "authorships,is_authors_truncated,type")
+# OpenAlex work types recorded as datasets (e.g. Zenodo, Figshare and HuBMAP deposits), software included, as DataCite
+# software is; every other type (data-paper and software-paper too) is a paper.
+DATASET_WORK_TYPES = {"dataset", "software"}
 INSTITUTION_FIELDS = ("id,ror,display_name,country_code,geo,type,lineage,associated_institutions,"
                       "homepage_url")
 INSTITUTION_BATCH_SIZE = 50
@@ -341,9 +344,11 @@ def collaboration_from_work(work, relationship_types, people_by_id, retrieved_at
         if person:
             people_by_id.setdefault(person["id"], person)
         participants.append(participant_from_authorship(authorship, person))
+    kind = "dataset" if work.get("type") in DATASET_WORK_TYPES else "paper"
     return {
-        "id": f"paper:doi:{doi}" if doi else f"paper:openalex:{openalex_work_id}",
-        "kind": "paper",
+        "id": f"{kind}:doi:{doi}" if doi else f"{kind}:openalex:{openalex_work_id}",
+        "kind": kind,
+        "openalex_type": work.get("type"),
         "relationship_types": relationship_types,
         "title": common.scrub_contact_details(work.get("title")),
         "year": work.get("publication_year"),
@@ -397,6 +402,7 @@ def report(collaborations):
         for collaboration in collaborations for participant in collaboration["participants"])
     truncated = sum(collaboration["participants_truncated"] for collaboration in collaborations)
     print(f"[{SOURCE}] relationship types: {dict(relationship_counts)}")
+    print(f"[{SOURCE}] OpenAlex work types: {dict(collections.Counter(collaboration['openalex_type'] for collaboration in collaborations).most_common())}")
     print(f"[{SOURCE}] authorship institution_status: {dict(status_counts)}")
     print(f"[{SOURCE}] works with truncated author lists: {truncated}")
     print(f"[{SOURCE}] years: " + ", ".join(

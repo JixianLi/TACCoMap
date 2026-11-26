@@ -111,7 +111,10 @@ def merge_by_id(documents, section):
     for document in documents:
         for record in document.get(section, []):
             if record["id"] in merged:
-                merge_record_fields(merged[record["id"]], record)
+                existing = merged[record["id"]]
+                if ":doi:" in record["id"]:
+                    record = without_listed_names(record, existing)
+                merge_record_fields(existing, record)
             else:
                 merged[record["id"]] = json.loads(json.dumps(record))
     return merged
@@ -127,6 +130,15 @@ def name_word_set(participant):
     return frozenset(common.normalize_name(participant.get("name_as_listed")).split())
 
 
+def without_listed_names(incoming, existing):
+    """incoming, without its participants already on existing under the same name. Two sources of one DOI (OpenAlex,
+    DataCite) can identify an author differently (an ORCID in one, only a name in the other). Names are compared as
+    word sets: DataCite lists "Last, First", OpenAlex "First Last"."""
+    listed_names = {name_word_set(participant) for participant in existing.get("participants") or []}
+    return {**incoming, "participants": [participant for participant in incoming.get("participants") or []
+                                         if name_word_set(participant) not in listed_names]}
+
+
 def merge_same_doi_collaborations(collaborations):
     """OpenAlex also indexes DOIs registered at DataCite, so one DOI can arrive as paper:doi:X (OpenAlex) and as
     dataset:doi:X (DataCite). Merge each pair into one record, of the kind DataCite's resource type gives it."""
@@ -139,13 +151,7 @@ def merge_same_doi_collaborations(collaborations):
         paper, dataset = collaborations.pop(paper_id), collaborations.pop(dataset_id)
         kind = "paper" if dataset.get("resource_type") in PAPER_RESOURCE_TYPES else "dataset"
         kept, other = (paper, dataset) if kind == "paper" else (dataset, paper)
-        # The two sources can identify one author differently (an ORCID in one, only a name in the other), so the
-        # second copy's participants already listed under the same name are dropped. Names are compared as word sets:
-        # DataCite lists "Last, First", OpenAlex "First Last".
-        listed_names = {name_word_set(participant) for participant in kept.get("participants") or []}
-        other = {**other, "participants": [participant for participant in other.get("participants") or []
-                                           if name_word_set(participant) not in listed_names]}
-        merge_record_fields(kept, other)
+        merge_record_fields(kept, without_listed_names(other, kept))
         kept["id"], kept["kind"] = f"{kind}:doi:{doi}", kind
         collaborations[kept["id"]] = kept
         merged_count[kind] += 1
