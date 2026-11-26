@@ -16,7 +16,7 @@ Maintainer-only build outputs go to `data/review/` (gitignored, never published;
 
 | field | notes |
 |---|---|
-| `id` | `paper:doi:<lowercased doi>` (fallback `paper:openalex:W…`), `award:<funder>:<award number>`, `subaward:usaspending:<prime award id>:<sub-award id>:<action date>:<amount>` (one per FFATA report; rows identical in all four parts get an ordinal suffix `:2`, `:3`, …), `dataset:doi:<doi>`, `allocation:access:<request number>`, `opportunity:grantsgov:<id>` |
+| `id` | `paper:doi:<lowercased doi>` (fallback `paper:openalex:W…`), `award:<funder>:<award number>`, `subaward:usaspending:<prime award id>:<sub-award id>:<action date>:<amount>` (one per FFATA report; rows identical in all four parts get an ordinal suffix `:2`, `:3`, …), `dataset:doi:<doi>`, `allocation:<project number>` (the XSEDE grant number or ACCESS request number: a project continued from XSEDE into ACCESS keeps its number, so its records from both sources merge; its span is the earliest start to the latest end), `opportunity:grantsgov:<id>` |
 | `kind` | `paper` \| `award` \| `subaward` \| `dataset` \| `allocation` \| `funding_opportunity` |
 | `relationship_types` | list; values below. A record can have several (e.g. staff co-authored AND acknowledges TACC) |
 | `title`, `year`, `start_date`, `end_date` | dates ISO `YYYY-MM-DD` or null |

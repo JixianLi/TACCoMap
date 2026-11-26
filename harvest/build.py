@@ -25,6 +25,9 @@ RELATIONSHIP_TYPES = [
     "staff_coauthor", "resource_acknowledgment", "tacc_lead_award", "tacc_partner_award",
     "tacc_mention_award", "subaward", "tacc_hosted_data", "tacc_resource_allocation", "funding_opportunity",
 ]
+# One project allocated under XSEDE and continued under ACCESS has one record from each source; its span runs from
+# the earliest start to the latest end (ACCESS lists a project's current dates, the XSEDE archive its earlier periods).
+ALLOCATION_SPAN_MERGE = {"start_date": min, "end_date": max, "year": min}
 # TACC was formally formed in 2001; earlier records belong to its predecessor supercomputing center.
 FIRST_COLLABORATION_DATE = "2001-01-01"
 # Allowlist, so a QA field added to person records later stays out of the published site until someone adds it here.
@@ -76,13 +79,19 @@ def merge_sources(existing_sources, incoming_sources):
 
 
 def union_list(existing, incoming):
-    return list(dict.fromkeys((existing or []) + (incoming or [])))
+    """Order-preserving union; items may be dicts (allocation resources), so they are compared as JSON."""
+    combined = (existing or []) + (incoming or [])
+    return list({json.dumps(item, sort_keys=True): item for item in combined}.values())
 
 
 def merge_record_fields(existing, incoming):
-    """Scalars: first non-null wins. Lists/dicts: union. sources: deduped by (source, record id)."""
+    """Scalars: first non-null wins, except an allocation's span (ALLOCATION_SPAN_MERGE). Lists/dicts: union.
+    sources: deduped by (source, record id)."""
     for key, value in incoming.items():
-        if key == "sources":
+        if existing.get("kind") == "allocation" and key in ALLOCATION_SPAN_MERGE \
+                and value is not None and existing.get(key) is not None:
+            existing[key] = ALLOCATION_SPAN_MERGE[key](existing[key], value)
+        elif key == "sources":
             existing["sources"] = merge_sources(existing.get("sources") or [], value or [])
         elif key == "participants":
             existing["participants"] = (existing.get("participants") or []) + (value or [])

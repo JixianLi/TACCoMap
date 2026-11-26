@@ -104,7 +104,7 @@ const TimelineChart = observer(function TimelineChart() {
                 </Box>
                 <Typography variant="caption" sx={{ color: "text.secondary", mt: 0.5 }}>
                     All institutions; follows the collaboration-type filters, not institution type.
-                    Allocations are current ACCESS allocations only, so recent years are inflated{undatedNote}.
+                    Allocations: XSEDE 2011–2022 from its public archive, plus ACCESS allocations active now; ACCESS allocations that ended after Aug 2022 are not published anywhere, so 2022–2025 is undercounted{undatedNote}.
                 </Typography>
             </Box>
     );

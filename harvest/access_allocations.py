@@ -100,7 +100,7 @@ def build_records(project, page_url, retrieved_at):
     person = None
     participants = []
     if pi_as_listed:
-        person_id = f"name:{common.normalize_name(pi_name)}|access"
+        person_id = f"name:{common.normalize_name(pi_name)}|allocation"
         person = {"id": person_id, "name": pi_name, "orcid": None, "openalex_author_id": None,
                   "other_ids": {}, "sources": [source_ref]}
         participants.append(common.participant(
@@ -120,7 +120,8 @@ def build_records(project, page_url, retrieved_at):
         identifiers["publication_dois"] = publication_dois
 
     collaboration = {
-        "id": f"allocation:access:{request_number}",
+        # Shared with xsede_allocations.py: a project continued from XSEDE keeps its number, and build.py merges them.
+        "id": f"allocation:{request_number}",
         "kind": "allocation",
         "relationship_types": ["tacc_resource_allocation"],
         "title": common.scrub_contact_details(project.get("requestTitle")),
