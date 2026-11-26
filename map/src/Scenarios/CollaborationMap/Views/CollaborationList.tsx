@@ -18,6 +18,55 @@ const PARTNER_PREVIEW_LENGTH = 10;
 const sectionTitle = { display: "block", fontWeight: 600, mt: 2, mb: 0.5 };
 const clickableRow = { cursor: "pointer", py: 0.5, borderRadius: 1, "&:hover": { bgcolor: "action.hover" } };
 
+// Records with the same title, kind and year shown as one row: some sources publish a DOI per part of one piece of
+// work (HuBMAP: one per tissue section, all titled after the donor). The records stay separate everywhere else.
+function groupSameTitle(records: MapRecord[]): MapRecord[][] {
+    const groups = new Map<string, MapRecord[]>();
+    for (const record of records) {
+        const key = record.title ? `${record.kindIndex}|${record.year}|${record.title.trim().toLowerCase()}` : record.id;
+        const group = groups.get(key);
+        if (group) group.push(record); else groups.set(key, [record]);
+    }
+    return [...groups.values()];
+}
+
+const RecordRow = observer(function RecordRow({ record, caption }: { record: MapRecord; caption?: string }) {
+    const context = useScenario().globalContext as CollaborationMapGlobalContext;
+    return (
+        <Box sx={clickableRow} onClick={() => context.selectRecord(record.id)}>
+            <Typography variant="caption" sx={{ display: "block", color: "text.secondary" }}>
+                {caption ?? [record.year ?? "undated", kindLabel(context, record), `${record.institutionPeople.length} institutions`].join(" · ")}
+            </Typography>
+            {!caption && <Typography variant="body2" sx={{ lineHeight: 1.3 }}>{record.title ?? "(untitled)"}</Typography>}
+        </Box>
+    );
+});
+
+const RecordGroupRow = observer(function RecordGroupRow({ group }: { group: MapRecord[] }) {
+    const context = useScenario().globalContext as CollaborationMapGlobalContext;
+    const [expanded, setExpanded] = useState(false);
+    const first = group[0];
+    return (
+        <Box>
+            <Box sx={clickableRow} onClick={() => setExpanded(!expanded)}>
+                <Typography variant="caption" sx={{ display: "block", color: "text.secondary" }}>
+                    {[first.year ?? "undated", kindLabel(context, first), `${group.length} records with this title`].join(" · ")}
+                    {expanded ? " ▾" : " ▸"}
+                </Typography>
+                <Typography variant="body2" sx={{ lineHeight: 1.3 }}>{first.title}</Typography>
+            </Box>
+            {expanded && (
+                <Box sx={{ pl: 2 }}>
+                    {group.map(record => (
+                        <RecordRow key={record.id} record={record}
+                                   caption={`${record.id.replace(/^[a-z]+:(doi:)?/, "")} · ${record.institutionPeople.length} institutions`} />
+                    ))}
+                </Box>
+            )}
+        </Box>
+    );
+});
+
 function kindLabel(context: CollaborationMapGlobalContext, record: MapRecord): string {
     return KIND_LABELS[context.data?.kinds[record.kindIndex] ?? ""] ?? "";
 }
@@ -30,6 +79,7 @@ export const CollaborationSection = observer(function CollaborationSection() {
     if (!context.records) return <Typography variant="caption" sx={{ display: "block", mt: 2, color: "text.secondary" }}>Loading collaborations…</Typography>;
 
     const records = context.selectedInstitutionRecords;
+    const groups = groupSameTitle(records);
     const partners = context.partnerEdges;
     const partnerPeople = partners.reduce((sum, edge) => sum + edge.people, 0);
     return (
@@ -56,17 +106,12 @@ export const CollaborationSection = observer(function CollaborationSection() {
             <Typography variant="caption" sx={{ display: "block", color: "text.secondary", mb: 0.5 }}>
                 Newest first. Select one to see the institutions on it.
             </Typography>
-            {records.slice(0, shownCount).map(record => (
-                <Box key={record.id} sx={clickableRow} onClick={() => context.selectRecord(record.id)}>
-                    <Typography variant="caption" sx={{ display: "block", color: "text.secondary" }}>
-                        {[record.year ?? "undated", kindLabel(context, record), `${record.institutionPeople.length} institutions`].join(" · ")}
-                    </Typography>
-                    <Typography variant="body2" sx={{ lineHeight: 1.3 }}>{record.title ?? "(untitled)"}</Typography>
-                </Box>
-            ))}
-            {records.length > shownCount && (
+            {groups.slice(0, shownCount).map(group => group.length === 1
+                ? <RecordRow key={group[0].id} record={group[0]} />
+                : <RecordGroupRow key={group[0].id} group={group} />)}
+            {groups.length > shownCount && (
                 <Button size="small" onClick={() => setShownCount(shownCount + PAGE_LENGTH)}>
-                    Show {Math.min(PAGE_LENGTH, records.length - shownCount)} more of {(records.length - shownCount).toLocaleString()}
+                    Show {Math.min(PAGE_LENGTH, groups.length - shownCount)} more of {(groups.length - shownCount).toLocaleString()}
                 </Button>
             )}
         </Box>

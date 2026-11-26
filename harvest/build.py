@@ -117,6 +117,41 @@ def merge_by_id(documents, section):
     return merged
 
 
+# DataCite resourceTypeGeneral values that make a DOI a paper; any other type (Dataset, Software, ...) or none makes it
+# a dataset.
+PAPER_RESOURCE_TYPES = {"Text", "Preprint", "JournalArticle", "ConferencePaper", "ConferenceProceeding", "Report",
+                        "Book", "BookChapter", "Dissertation", "PeerReview", "Standard"}
+
+
+def name_word_set(participant):
+    return frozenset(common.normalize_name(participant.get("name_as_listed")).split())
+
+
+def merge_same_doi_collaborations(collaborations):
+    """OpenAlex also indexes DOIs registered at DataCite, so one DOI can arrive as paper:doi:X (OpenAlex) and as
+    dataset:doi:X (DataCite). Merge each pair into one record, of the kind DataCite's resource type gives it."""
+    merged_count = collections.Counter()
+    for paper_id in [collaboration_id for collaboration_id in collaborations if collaboration_id.startswith("paper:doi:")]:
+        doi = paper_id[len("paper:doi:"):]
+        dataset_id = f"dataset:doi:{doi}"
+        if dataset_id not in collaborations:
+            continue
+        paper, dataset = collaborations.pop(paper_id), collaborations.pop(dataset_id)
+        kind = "paper" if dataset.get("resource_type") in PAPER_RESOURCE_TYPES else "dataset"
+        kept, other = (paper, dataset) if kind == "paper" else (dataset, paper)
+        # The two sources can identify one author differently (an ORCID in one, only a name in the other), so the
+        # second copy's participants already listed under the same name are dropped. Names are compared as word sets:
+        # DataCite lists "Last, First", OpenAlex "First Last".
+        listed_names = {name_word_set(participant) for participant in kept.get("participants") or []}
+        other = {**other, "participants": [participant for participant in other.get("participants") or []
+                                           if name_word_set(participant) not in listed_names]}
+        merge_record_fields(kept, other)
+        kept["id"], kept["kind"] = f"{kind}:doi:{doi}", kind
+        collaborations[kept["id"]] = kept
+        merged_count[kind] += 1
+    print(f"merged {sum(merged_count.values())} DOIs found by both OpenAlex and DataCite: {dict(merged_count)}")
+
+
 def collaboration_date(collaboration):
     """Award/allocation start, publication date or subaward action date (start_date), else the year; None if undated."""
     if collaboration.get("start_date"):
@@ -507,6 +542,7 @@ def main():
     overrides = build_institutions.load_overrides(arguments.overrides)
 
     collaborations = merge_by_id(documents, "collaborations")
+    merge_same_doi_collaborations(collaborations)
     people = merge_by_id(documents, "people")
     drop_collaborations_before_tacc(collaborations, people)
     institutions = merge_by_id(documents, "institutions")
