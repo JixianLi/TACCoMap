@@ -1,0 +1,3 @@
+[submodule "map/vendor/webuvisbox"]
+	path = map/vendor/webuvisbox
+	url = https://github.com/JixianLi/webuvisbox.git

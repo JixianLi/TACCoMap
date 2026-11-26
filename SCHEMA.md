@@ -126,6 +126,32 @@ Fields: `name`, `orcid`, `openalex_author_id`, `other_ids` (dict), `sources`. Me
 - **Participants** lose `current_email_domain_is_tacc` (`UNPUBLISHED_PARTICIPANT_FIELDS`); it stays in `data/normalized/nsf.json`.
 - **The person merge log** is written to `data/review/`. A `web/data/person_merge_log.json` left by an older build is deleted on every build.
 
+## Map aggregate (`map/public/data/map_institutions.json`, gitignored)
+
+`harvest/build_map.py` (called from `build.py`; `--map-output-directory DIR` writes it elsewhere) writes the map
+preview's only data file. It holds no people, titles or record ids: only institutions and counts.
+
+```json
+{ "generated_at": "ISO-8601", "kinds": ["paper", "award", "subaward", "dataset", "allocation"],
+  "relationship_types": ["staff_coauthor", "..."], "direct_relationship_types": ["..."],
+  "hub_institution_ids": ["ror:00xg4bh43", "ror:00hj54h04"],
+  "collaboration_counts": [[2019, 0, 1, 412], "..."],
+  "institutions": [{ "id", "name", "city", "country_code", "institution_type", "latitude", "longitude",
+                     "counts": [[year, kind_index, relationship_mask, count], "..."] }] }
+```
+
+- A count row is `[year or null, index into kinds, relationship mask, number of collaborations]`. Bit `i` of the mask
+  is set when `relationship_types[i]` applies to the collaboration. Grouping by the whole mask, not by single types,
+  lets the map count a collaboration once under any set of shown types.
+- `year` is the year of `start_date`, else `year`; null when undated.
+- An institution's rows count each collaboration once, however many of its people are on it. `collaboration_counts`
+  counts each collaboration once overall, and the map's timeline uses it.
+- `funding_opportunity` records are left out: they are not collaborations and have no participants.
+- `direct_relationship_types` is `DIRECT_RELATIONSHIP_TYPES` in `build.py`. `hub_institution_ids` (TACC, then UT
+  Austin) are drawn as one hub glyph, not as collaborator circles.
+- Coordinates are rounded to four decimals (about 10 m). Institutions without coordinates are kept with null
+  latitude/longitude, so the map can report how many it cannot place.
+
 ## Review files (`data/review/`, gitignored, never published)
 
 Maintainer-only outputs of `build.py` (`--review-directory DIR` writes them elsewhere):

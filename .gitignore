@@ -11,3 +11,7 @@ data/evidence/
 *.log
 *.pkl
 .venv/
+/map/public/data/
+/map/node_modules/
+/map/dist/
+/map/tsconfig.tsbuildinfo

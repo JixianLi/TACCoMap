@@ -8,8 +8,8 @@ view is planned on top of the same data.
 harvest/<source>.py  ->  data/normalized/<source>.json  ->  harvest/build.py  ->  web/data/*.json  ->  web/ (static browser)
 ```
 
-The data contract is `SCHEMA.md`; project rules are in `CLAUDE.md`. Everything is Python 3 standard library and
-plain browser JavaScript, so there are no dependencies to install. The project Python is pinned with uv
+The data contract is `SCHEMA.md`; project rules are in `CLAUDE.md`. The pipeline and browser are Python 3 standard
+library and plain browser JavaScript, with no dependencies to install; only the map preview in `map/` needs Node. The project Python is pinned with uv
 (`.python-version`, `pyproject.toml`): run `uv sync` once, then use `uv run python …` as below.
 
 ## Running
@@ -35,6 +35,10 @@ uv run python harvest/build.py --skip-ror-matching   # fast, offline-ish build (
 
 # 3. Serve the browser
 uv run python -m http.server -d web 8000             # open http://localhost:8000
+
+# 4. Map preview (WebUVisBox scenario in map/; needs Node 18+). build.py writes map/public/data/map_institutions.json
+git submodule update --init                          # once: map/vendor/webuvisbox
+cd map && npm install && npm run dev                 # open the URL Vite prints; keep step 3 running for "open in browser" links
 ```
 
 Re-running a harvester is cheap because responses are cached; delete `data/raw/<source>/` to force a refresh.

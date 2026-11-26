@@ -9,6 +9,7 @@ import sys
 
 import build_awards
 import build_institutions
+import build_map
 import build_people
 import common
 
@@ -43,6 +44,8 @@ def parse_arguments():
     parser.add_argument("output_directory", nargs="?", default=str(common.PROJECT_ROOT / "web" / "data"))
     parser.add_argument("--review-directory", default=str(common.PROJECT_ROOT / "data" / "review"),
                         help="maintainer-only outputs (merge log, full people records); never published")
+    parser.add_argument("--map-output-directory", default=str(common.PROJECT_ROOT / "map" / "public" / "data"),
+                        help="the map preview's aggregate file (map_institutions.json)")
     parser.add_argument("--overrides", default=str(build_institutions.OVERRIDES_PATH))
     parser.add_argument("--skip-ror-matching", action="store_true",
                         help="do not call the ROR affiliation API (manual aliases and dataset-name matches still apply)")
@@ -426,6 +429,14 @@ def write_outputs(output_directory, documents, collaborations, people, instituti
     print(f"  {'meta.json':28} {'':>8}         {size / 1024:>10.1f} KiB")
 
 
+def write_map_output(map_output_directory, collaborations, institutions):
+    map_output_directory = pathlib.Path(map_output_directory)
+    map_output_directory.mkdir(parents=True, exist_ok=True)
+    payload = build_map.build_map_aggregate(collaborations, institutions, DIRECT_RELATIONSHIP_TYPES)
+    size = write_compact_json(map_output_directory / "map_institutions.json", payload)
+    print(f"  {'map_institutions.json':28} {len(payload['institutions']):>8} records {size / 1024:>10.1f} KiB")
+
+
 def print_institution_type_table(institutions):
     print("\ninstitution_type x institution_type_reason:")
     reason_counts_by_type = collections.defaultdict(collections.Counter)
@@ -538,6 +549,7 @@ def main():
     dropped_institution_count = build_institutions.drop_institutions_without_collaborations(institutions)
 
     write_outputs(arguments.output_directory, documents, collaborations, people, institutions)
+    write_map_output(arguments.map_output_directory, collaborations, institutions)
     write_review_outputs(arguments.review_directory, arguments.output_directory, people, merge_log, refused_merges,
                          person_stats["stripped_orcids"])
     print_award_summary(award_stats, relationship_changes, collaborations)
