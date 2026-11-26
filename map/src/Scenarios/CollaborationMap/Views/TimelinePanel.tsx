@@ -17,13 +17,26 @@ const BAR_GAP = 0.2;
 
 export default observer(function TimelinePanel() {
     const context = useScenario().globalContext as CollaborationMapGlobalContext;
+    const years = context.years;
+    return (
+        <Panel panelName="Timeline" appbarContent={
+            context.data && !context.isFullYearRange && (
+                <Button size="small" onClick={() => context.setYearRange([years[0], years[years.length - 1]])}>All years</Button>
+            )}>
+            {context.data && <TimelineChart />}
+        </Panel>
+    );
+});
+
+// Rendered inside <Panel>, so useTheme() returns the panel's own tokens: in some WebUVisBox display modes (neutral),
+// Panel gives control panels a theme of their own.
+const TimelineChart = observer(function TimelineChart() {
+    const context = useScenario().globalContext as CollaborationMapGlobalContext;
     const tokens = useTheme().tokens;
     const svgRef = useRef<SVGSVGElement>(null);
     const [dragStartYear, setDragStartYear] = useState<number | null>(null);
     const [hoveredYear, setHoveredYear] = useState<number | null>(null);
-    const data = context.data;
-    if (!data) return <Panel panelName="Timeline" />;
-
+    const data = context.data!;
     const years = context.years;
     const totals = countsByYear(data.collaboration_counts, context.filter, years);
     const selected = context.selectedInstitution;
@@ -44,10 +57,6 @@ export default observer(function TimelinePanel() {
     const undatedNote = context.isFullYearRange ? "" : " · undated records hidden while a range is set";
 
     return (
-        <Panel panelName="Timeline" appbarContent={
-            !context.isFullYearRange && (
-                <Button size="small" onClick={() => context.setYearRange([years[0], years[years.length - 1]])}>All years</Button>
-            )}>
             <Box sx={{ width: 1, display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}>
                 <Typography variant="body2" sx={{ mb: 0.5 }}>
                     {readoutYear !== null
@@ -98,6 +107,5 @@ export default observer(function TimelinePanel() {
                     Allocations are current ACCESS allocations only, so recent years are inflated{undatedNote}.
                 </Typography>
             </Box>
-        </Panel>
     );
 });

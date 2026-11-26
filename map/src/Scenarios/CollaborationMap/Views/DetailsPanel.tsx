@@ -3,7 +3,6 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
-import { useTheme } from "@mui/material/styles";
 import { Panel } from "@core/Panels/Panel";
 import { useScenario } from "@core/ScenarioManager/ScenarioManager";
 import type { CollaborationMapGlobalContext } from "../CollaborationMapGlobalContext";
@@ -16,7 +15,6 @@ const RANKING_LENGTH = 15;
 
 export default observer(function DetailsPanel() {
     const context = useScenario().globalContext as CollaborationMapGlobalContext;
-    const tokens = useTheme().tokens;
     const data = context.data;
     if (!data) return <Panel panelName="Details" />;
     const selected = context.selectedInstitution;
@@ -35,12 +33,12 @@ export default observer(function DetailsPanel() {
                         <Box key={institution.id} onClick={() => context.selectInstitution(institution.id, true)}
                              onPointerEnter={() => context.setHoveredInstitution(institution.id)}
                              onPointerLeave={() => context.setHoveredInstitution(null)}
-                             sx={{ cursor: "pointer", mb: 0.75, "&:hover .bar": { bgcolor: tokens.accentOnSurface } }}>
+                             sx={{ cursor: "pointer", mb: 0.75, "&:hover .bar": { bgcolor: theme => theme.tokens.accentOnSurface } }}>
                             <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1 }}>
                                 <Typography variant="body2" noWrap>{institution.name}</Typography>
                                 <Typography variant="body2">{count.toLocaleString()}</Typography>
                             </Box>
-                            <Box className="bar" sx={{ height: 4, borderRadius: 2, bgcolor: tokens.textSecondary, width: `${(count / top) * 100}%` }} />
+                            <Box className="bar" sx={{ height: 4, borderRadius: 2, bgcolor: theme => theme.tokens.textSecondary, width: `${(count / top) * 100}%` }} />
                         </Box>
                     ))}
                 </Box>

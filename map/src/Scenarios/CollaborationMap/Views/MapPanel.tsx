@@ -48,20 +48,21 @@ function boundsTransform(projection: d3.GeoProjection, bounds: [[number, number]
 export default observer(function MapPanel() {
     const context = useScenario().globalContext as CollaborationMapGlobalContext;
     const tokens = useTheme().tokens;
-    const containerRef = useRef<HTMLDivElement>(null);
-    const svgRef = useRef<SVGSVGElement>(null);
+    // Elements held in state through callback refs, not useRef: Panel can rebuild its content's DOM (WebUVisBox wraps it
+    // in a ThemeProvider in some display modes), and the observer and zoom must follow the element that exists now.
+    const [container, setContainer] = useState<HTMLDivElement | null>(null);
+    const [svgElement, setSvgElement] = useState<SVGSVGElement | null>(null);
     const zoomRef = useRef<d3.ZoomBehavior<SVGSVGElement, unknown> | null>(null);
     const [size, setSize] = useState({ width: 0, height: 0 });
     const [transform, setTransform] = useState(d3.zoomIdentity);
 
     useEffect(() => {
-        const container = containerRef.current;
         if (!container) return;
         const observer = new ResizeObserver(([entry]) =>
             setSize({ width: entry.contentRect.width, height: entry.contentRect.height }));
         observer.observe(container);
         return () => observer.disconnect();
-    }, []);
+    }, [container]);
 
     const { width, height } = size;
     const projection = useMemo(() => d3.geoMercator().fitSize([Math.max(width, 1), Math.max(height, 1)],
@@ -69,15 +70,14 @@ export default observer(function MapPanel() {
     const path = useMemo(() => d3.geoPath(projection), [projection]);
 
     const zoomTo = (bounds: [[number, number], [number, number]] | null, animate = true) => {
-        const svg = svgRef.current;
-        if (!svg || !zoomRef.current || width === 0) return;
+        if (!svgElement || !zoomRef.current || width === 0) return;
         const target = bounds ? boundsTransform(projection, bounds, width, height) : d3.zoomIdentity;
-        const selection = d3.select(svg);
+        const selection = d3.select(svgElement);
         (animate ? selection.transition().duration(600) : selection).call(zoomRef.current.transform as any, target);
     };
 
     useEffect(() => {
-        const svg = svgRef.current;
+        const svg = svgElement;
         if (!svg || width === 0) return;
         const [[x0, y0], [x1, y1]] = [projection(MAP_BOUNDS[0])!, projection(MAP_BOUNDS[1])!];
         const zoom = d3.zoom<SVGSVGElement, unknown>()
@@ -90,7 +90,7 @@ export default observer(function MapPanel() {
         zoomTo(US_BOUNDS, false);
         return () => { d3.select(svg).on(".zoom", null); };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [projection, width, height]);
+    }, [svgElement, projection, width, height]);
 
     const selected = context.selectedInstitution;
     useEffect(() => {
@@ -117,10 +117,10 @@ export default observer(function MapPanel() {
     const highlightIds = new Set([context.selectedInstitutionId, context.hoveredInstitutionId]);
 
     return (
-        <Panel panelName="Map">
-            <Box ref={containerRef} sx={{ position: "relative", width: 1, flex: 1, minHeight: 0, overflow: "hidden",
+        <Panel panelName="Map" scene>
+            <Box ref={setContainer} sx={{ position: "relative", width: 1, flex: 1, minHeight: 0, overflow: "hidden",
                                           bgcolor: tokens.canvas }}>
-                <svg ref={svgRef} width={width} height={height} role="img"
+                <svg ref={setSvgElement} width={width} height={height} role="img"
                      aria-label="Institutions collaborating with TACC on a Mercator world map"
                      style={{ display: "block", cursor: "grab", touchAction: "none" }}
                      onClick={event => { if (event.target === event.currentTarget || (event.target as SVGElement).dataset.land) context.selectInstitution(null); }}>
