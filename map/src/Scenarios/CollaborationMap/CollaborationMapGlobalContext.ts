@@ -1,7 +1,8 @@
 import { makeAutoObservable, observable, runInAction } from "mobx";
 import type { GlobalContext } from "@core/Types/GlobalContext";
 import {
-    FIRST_YEAR, countRows, loadMapAggregate, type CountFilter, type MapAggregate, type MapInstitution,
+    FIRST_YEAR, countRows, loadMapAggregate, loadMapRecords, recordPasses, type CountFilter, type MapAggregate,
+    type MapInstitution, type MapRecord,
 } from "./MapData";
 
 export interface InstitutionCount {
@@ -11,8 +12,21 @@ export interface InstitutionCount {
     countAllYears: number;
 }
 
+// A line from the selected institution to another one: the people from that institution (on the selected
+// collaboration, or summed over the selected institution's collaborations), and how many collaborations they share.
+export interface PartnerEdge {
+    institution: MapInstitution;
+    people: number;
+    sharedCollaborations: number;
+}
+
 export class CollaborationMapGlobalContext implements GlobalContext {
     dataUrl = "data/map_institutions.json";
+    recordsUrl = "data/map_records.json";
+    records: MapRecord[] | null = null;
+    recordsLoading = false;
+    recordsError: string | null = null;
+    selectedRecordId: string | null = null;
     // The record browser is not published; only a dev session links to a local copy (CLAUDE.md "Web UI").
     browserBaseUrl: string | null = import.meta.env.DEV ? "http://localhost:8000/" : null;
     data: MapAggregate | null = null;
@@ -27,11 +41,12 @@ export class CollaborationMapGlobalContext implements GlobalContext {
     focusRequest = 0;
 
     constructor() {
-        makeAutoObservable(this, { data: observable.ref });
+        makeAutoObservable(this, { data: observable.ref, records: observable.ref });
     }
 
     initialize(globalData: any): void {
         this.dataUrl = globalData?.data_url ?? this.dataUrl;
+        this.recordsUrl = globalData?.records_url ?? this.recordsUrl;
     }
 
     async asyncInitialize(): Promise<void> {
@@ -49,7 +64,7 @@ export class CollaborationMapGlobalContext implements GlobalContext {
     }
 
     toObject(): any {
-        return { data_url: this.dataUrl };
+        return { data_url: this.dataUrl, records_url: this.recordsUrl };
     }
 
     get years(): number[] {
@@ -146,7 +161,81 @@ export class CollaborationMapGlobalContext implements GlobalContext {
 
     selectInstitution(institutionId: string | null, focus = false): void {
         this.selectedInstitutionId = institutionId;
+        this.selectedRecordId = null;
         if (focus && institutionId) this.focusRequest += 1;
+        if (institutionId) void this.ensureRecordsLoaded();
+    }
+
+    selectRecord(recordId: string | null): void {
+        this.selectedRecordId = recordId;
+    }
+
+    // Loaded on the first selection, not with the page: it is several times the size of the counts.
+    async ensureRecordsLoaded(): Promise<void> {
+        if (this.records || this.recordsLoading) return;
+        this.recordsLoading = true;
+        try {
+            const records = await loadMapRecords(this.recordsUrl);
+            runInAction(() => { this.records = records; });
+        } catch (error) {
+            runInAction(() => { this.recordsError = String(error); });
+        } finally {
+            runInAction(() => { this.recordsLoading = false; });
+        }
+    }
+
+    get recordsByInstitution(): Map<string, MapRecord[]> {
+        const index = new Map<string, MapRecord[]>();
+        for (const record of this.records ?? []) {
+            for (const [institutionId] of record.institutionPeople) {
+                const list = index.get(institutionId);
+                if (list) list.push(record); else index.set(institutionId, [record]);
+            }
+        }
+        return index;
+    }
+
+    institutionById(institutionId: string): MapInstitution | undefined {
+        return this.institutionIndex.get(institutionId);
+    }
+
+    get institutionIndex(): Map<string, MapInstitution> {
+        return new Map((this.data?.institutions ?? []).map(institution => [institution.id, institution]));
+    }
+
+    // The selected institution's collaborations under the current filters, newest first.
+    get selectedInstitutionRecords(): MapRecord[] {
+        if (!this.selectedInstitutionId) return [];
+        const filter = this.filter;
+        return (this.recordsByInstitution.get(this.selectedInstitutionId) ?? [])
+            .filter(record => recordPasses(record, filter))
+            .sort((left, right) => (right.year ?? 0) - (left.year ?? 0) || (left.title ?? "").localeCompare(right.title ?? ""));
+    }
+
+    get selectedRecord(): MapRecord | null {
+        return this.records?.find(record => record.id === this.selectedRecordId) ?? null;
+    }
+
+    // With a collaboration selected: every other institution on it (the hub too, as one line to Austin). Otherwise:
+    // every institution sharing at least one of the selected institution's collaborations, people summed (the hub
+    // left out: the arc to Austin stands for it).
+    get partnerEdges(): PartnerEdge[] {
+        const selectedId = this.selectedInstitutionId;
+        if (!selectedId) return [];
+        const records = this.selectedRecord ? [this.selectedRecord] : this.selectedInstitutionRecords;
+        const totals = new Map<string, PartnerEdge>();
+        for (const record of records) {
+            for (const [institutionId, people] of record.institutionPeople) {
+                if (institutionId === selectedId || (!this.selectedRecord && this.hubIds.has(institutionId))) continue;
+                const institution = this.institutionById(institutionId);
+                if (!institution) continue;
+                const edge = totals.get(institutionId) ?? { institution, people: 0, sharedCollaborations: 0 };
+                edge.people += people;
+                edge.sharedCollaborations += 1;
+                totals.set(institutionId, edge);
+            }
+        }
+        return [...totals.values()].sort((left, right) => right.people - left.people);
     }
 
     setHoveredInstitution(institutionId: string | null): void {

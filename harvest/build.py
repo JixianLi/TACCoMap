@@ -444,6 +444,9 @@ def write_map_output(map_output_directory, collaborations, institutions):
     payload = build_map.build_map_aggregate(collaborations, institutions, DIRECT_RELATIONSHIP_TYPES)
     size = write_compact_json(map_output_directory / "map_institutions.json", payload)
     print(f"  {'map_institutions.json':28} {len(payload['institutions']):>8} records {size / 1024:>10.1f} KiB")
+    records = build_map.build_map_records(collaborations, institutions, round_coordinates)
+    size = write_compact_json(map_output_directory / "map_records.json", records)
+    print(f"  {'map_records.json':28} {len(records['records']):>8} records {size / 1024:>10.1f} KiB")
 
 
 def print_institution_type_table(institutions):

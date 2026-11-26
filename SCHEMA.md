@@ -152,6 +152,26 @@ preview's only data file. It holds no people, titles or record ids: only institu
 - Coordinates are rounded to four decimals (about 10 m). Institutions without coordinates are kept with null
   latitude/longitude, so the map can report how many it cannot place.
 
+## Map records (`map/public/data/map_records.json`, gitignored)
+
+Written by `harvest/build_map.py` beside the aggregate; the map loads it on the first selection of an institution, for
+the list of its collaborations and the lines to the institutions on them. It holds titles and counts of people, never
+names.
+
+```json
+{ "generated_at": "ISO-8601", "kinds": ["paper", "..."], "relationship_types": ["staff_coauthor", "..."],
+  "fields": ["id", "kind_index", "year", "relationship_mask", "title", "url", "institution_people", "participants_truncated"],
+  "records": [["paper:doi:…", 0, 2019, 1, "Title", "https://doi.org/…", [["ror:…", 3], ["ror:…", 1]], false], "..."] }
+```
+
+- One row per collaboration of the map's kinds that has at least one known institution; `year` and the mask as in the
+  aggregate. Titles get the same coordinate rounding as the published record files.
+- `url` is the record's own link, else its DOI's.
+- `institution_people`: each institution on the record with the number of distinct people under it (person id, else
+  the name as listed), most first. A person listed under two institutions counts for both. An institution the record
+  names with no person under it (e.g. an awardee organization) has 0.
+- `participants_truncated`: the source cut the author list, so the counts are a lower bound.
+
 ## Review files (`data/review/`, gitignored, never published)
 
 Maintainer-only outputs of `build.py` (`--review-directory DIR` writes them elsewhere):
@@ -168,7 +188,7 @@ Stdlib-only check that fails (exit 1) on anything that must stay local. Matches 
 - `uv run python harvest/check_publishable.py PATH ...`: the given files or folders, recursively.
 - `uv run python harvest/check_publishable.py --staged`: the index copies of staged files (what will actually be committed). A staged submodule (`map/vendor/webuvisbox`) is only a commit id in another repository, with no file content here: it is skipped and named in the output.
 - `uv run python harvest/check_publishable.py --site DIR`: a staged GitHub Pages folder; fails on any file outside the allowlist (`index.html`, `style.css`, `app.js`, `data.js`, `data/{meta,papers,awards,datasets,allocations,funding_opportunities,people,institutions}.json`) and on any allowlisted file that is missing, then runs every content check.
-- `uv run python harvest/check_publishable.py --map-site DIR`: the staged map site (`scripts/publish_map.sh` stages it in `publish/`); the same checks against its own allowlist: `index.html`, `.nojekyll`, `data/map_institutions.json`, and content-hashed `assets/*.js|css|woff2`.
+- `uv run python harvest/check_publishable.py --map-site DIR`: the staged map site (`scripts/publish_map.sh` stages it in `publish/`); the same checks against its own allowlist: `index.html`, `.nojekyll`, `data/map_institutions.json`, `data/map_records.json`, and content-hashed `assets/*.js|css|woff2`.
 
 Checks: paths under `data/raw/`, `data/evidence/`, `data/normalized/`, `data/review/` or a publish staging folder (`publish/`, …); any `person_merge_log*.json`; files over 45,000,000 bytes; emails (plain and obfuscated), mailto links, phone numbers; personal social-media profile URLs; the ORCID QA field names as JSON keys; person-note wording in person files (`data/manual/person*.json`, `people.json`); local absolute paths (`/Users/`, `/home/`, `/private/`); and occurrences of `$OPENALEX_API_KEY` when it is set in the environment (count only). GitHub repository links are not flagged.
 

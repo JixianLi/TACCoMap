@@ -23,6 +23,8 @@ const MIN_RADIUS = 1.5;
 const MAX_RADIUS = 22;
 const HUB_RADIUS = 9;
 const MAX_ARC_WIDTH = 6;
+const MIN_EDGE_WIDTH = 0.5;
+const MAX_EDGE_WIDTH = 6;
 
 const topology = worldTopology as unknown as Topology<{ countries: GeometryCollection }>;
 const land = feature(topology, topology.objects.countries);
@@ -108,9 +110,28 @@ export default observer(function MapPanel() {
 
     const selectedCount = selected ? countRows(selected.counts, context.filter) : 0;
     const arcWidth = d3.scaleSqrt().domain([0, context.maxCountAllYears]).range([1, MAX_ARC_WIDTH]);
-    const arcPath = selected && hubInstitution && selected.longitude !== null && !context.hubIds.has(selected.id)
+    const recordSelected = context.selectedRecord !== null;
+    const arcPath = !recordSelected && selected && hubInstitution && selected.longitude !== null && !context.hubIds.has(selected.id)
         ? path({ type: "LineString", coordinates: [[hubInstitution.longitude!, hubInstitution.latitude!], [selected.longitude, selected.latitude!]] })
         : null;
+
+    // Lines from the selected institution, width by people. The hub's institutions (TACC, UT Austin) share one point,
+    // so their people draw as one line to the star.
+    const edgeTotals = new Map<string, { longitude: number; latitude: number; people: number }>();
+    if (selected && selected.longitude !== null && selected.latitude !== null) {
+        for (const edge of context.partnerEdges) {
+            const isHub = context.hubIds.has(edge.institution.id);
+            const anchor = isHub ? hubInstitution : edge.institution;
+            if (!anchor || anchor.longitude === null || anchor.latitude === null) continue;
+            const key = isHub ? "hub" : edge.institution.id;
+            const total = edgeTotals.get(key) ?? { longitude: anchor.longitude, latitude: anchor.latitude, people: 0 };
+            total.people += edge.people;
+            edgeTotals.set(key, total);
+        }
+    }
+    const edgeWidth = d3.scaleSqrt()
+        .domain([0, Math.max(1, ...[...edgeTotals.values()].map(edge => edge.people))]).range([MIN_EDGE_WIDTH, MAX_EDGE_WIDTH]);
+    const involvedIds = new Set(context.selectedRecord?.institutionPeople.map(([institutionId]) => institutionId) ?? []);
 
     const hovered = context.hoveredInstitution;
     const hoveredPoint = hovered && hovered.longitude !== null ? screen(hovered.longitude, hovered.latitude!) : null;
@@ -128,6 +149,12 @@ export default observer(function MapPanel() {
                         <path data-land="1" d={path(land) ?? undefined} fill={tokens.surface} />
                         <path d={path(borders) ?? undefined} fill="none" stroke={tokens.border} strokeWidth={0.75}
                               vectorEffect="non-scaling-stroke" pointerEvents="none" />
+                        {selected && [...edgeTotals.entries()].map(([key, edge]) => (
+                            <path key={key} fill="none" stroke={tokens.text} strokeOpacity={recordSelected ? 0.7 : 0.3}
+                                  strokeLinecap="round" strokeWidth={edgeWidth(edge.people)} vectorEffect="non-scaling-stroke"
+                                  pointerEvents="none"
+                                  d={path({ type: "LineString", coordinates: [[selected.longitude!, selected.latitude!], [edge.longitude, edge.latitude]] }) ?? undefined} />
+                        ))}
                         {arcPath && (
                             <path d={arcPath} fill="none" stroke={accent} strokeOpacity={0.85} strokeLinecap="round"
                                   strokeWidth={arcWidth(selectedCount)} vectorEffect="non-scaling-stroke" pointerEvents="none" />
@@ -138,10 +165,12 @@ export default observer(function MapPanel() {
                             const [x, y] = screen(institution.longitude!, institution.latitude!);
                             if (x < -MAX_RADIUS || y < -MAX_RADIUS || x > width + MAX_RADIUS || y > height + MAX_RADIUS) return null;
                             const highlighted = highlightIds.has(institution.id);
+                            // With a collaboration selected, the institutions not on it fade.
+                            const faded = recordSelected && !highlighted && !involvedIds.has(institution.id);
                             return (
                                 <circle key={institution.id} cx={x} cy={y} r={Math.max(MIN_RADIUS, radius(count))}
-                                        fill={highlighted ? accent : tokens.text} fillOpacity={highlighted ? 0.9 : 0.28}
-                                        stroke={highlighted ? accent : tokens.text} strokeOpacity={highlighted ? 1 : 0.55}
+                                        fill={highlighted ? accent : tokens.text} fillOpacity={highlighted ? 0.9 : faded ? 0.05 : 0.28}
+                                        stroke={highlighted ? accent : tokens.text} strokeOpacity={highlighted ? 1 : faded ? 0.1 : 0.55}
                                         strokeWidth={highlighted ? 1.5 : 0.6} style={{ cursor: "pointer" }}
                                         onPointerEnter={() => context.setHoveredInstitution(institution.id)}
                                         onPointerLeave={() => context.setHoveredInstitution(null)}

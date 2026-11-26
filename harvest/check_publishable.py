@@ -38,7 +38,7 @@ SITE_ALLOWLIST = {
     "data/institutions.json",
 }
 # The map's Vite build: fixed files plus content-hashed bundles, whose names change on every build.
-MAP_SITE_ALLOWLIST = {"index.html", ".nojekyll", "data/map_institutions.json"}
+MAP_SITE_ALLOWLIST = {"index.html", ".nojekyll", "data/map_institutions.json", "data/map_records.json"}
 MAP_SITE_ASSET_PATTERN = re.compile(r"assets/[\w.-]+\.(?:js|css|woff2)")
 # Minified library code is full of decimal constants (shader polynomials, color matrices, PRNG seeds) that read as
 # phone numbers; every other check still runs on the bundles, and all checks run on the map's data and index.html.

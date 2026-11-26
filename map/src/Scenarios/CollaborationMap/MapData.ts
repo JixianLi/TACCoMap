@@ -107,3 +107,34 @@ export function yearSpan(rows: CountRow[], filter: CountFilter): [number, number
     }
     return first === Infinity ? null : [first, last];
 }
+
+// map_records.json (harvest/build_map.py, SCHEMA.md "Map records"): one row per collaboration, as a positional array
+// [id, kind index, year or null, relationship mask, title, url, [[institution id, people], ...], participants truncated].
+export type MapRecordRow = [string, number, number | null, number, string | null, string | null, [string, number][], boolean];
+
+export interface MapRecord {
+    id: string;
+    kindIndex: number;
+    year: number | null;
+    relationshipMask: number;
+    title: string | null;
+    url: string | null;
+    // Number of people from each institution on this collaboration, most first; 0 when the source names the
+    // institution but no person under it.
+    institutionPeople: [string, number][];
+    participantsTruncated: boolean;
+}
+
+export async function loadMapRecords(url: string): Promise<MapRecord[]> {
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error(`${url}: HTTP ${response.status}. Run harvest/build.py to write it.`);
+    }
+    const payload: { records: MapRecordRow[] } = await response.json();
+    return payload.records.map(([id, kindIndex, year, relationshipMask, title, url, institutionPeople, participantsTruncated]) =>
+        ({ id, kindIndex, year, relationshipMask, title, url, institutionPeople, participantsTruncated }));
+}
+
+export function recordPasses(record: MapRecord, filter: CountFilter): boolean {
+    return rowPasses([record.year, record.kindIndex, record.relationshipMask, 1], filter);
+}

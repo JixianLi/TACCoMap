@@ -10,6 +10,7 @@ import {
     INSTITUTION_TYPE_LABELS, RELATIONSHIP_TYPE_LABELS, countRows, countsByRelationshipType, yearSpan,
 } from "../MapData";
 import { placeLabel } from "./InstitutionTooltip";
+import { CollaborationSection, RecordDetail } from "./CollaborationList";
 
 const RANKING_LENGTH = 15;
 
@@ -51,6 +52,7 @@ export default observer(function DetailsPanel() {
     const span = yearSpan(selected.counts, filter);
     const total = countRows(selected.counts, filter);
     const browserUrl = context.browserUrl(selected.id);
+    const selectedRecord = context.selectedRecord;
     return (
         <Panel panelName="Details" appbarContent={<Button size="small" onClick={() => context.selectInstitution(null)}>Clear</Button>}>
             <Box sx={{ width: 1 }}>
@@ -62,6 +64,7 @@ export default observer(function DetailsPanel() {
                 {context.hubIds.has(selected.id) && (
                     <Typography variant="caption" sx={{ display: "block", color: "text.secondary" }}>Drawn as the TACC hub.</Typography>
                 )}
+                {selectedRecord ? <RecordDetail record={selectedRecord} /> : <>
                 <Typography variant="body2" sx={{ mt: 1 }}>
                     <b>{total.toLocaleString()}</b> collaborations under the current filters{span ? `, ${span[0]}–${span[1]}` : ""}
                 </Typography>
@@ -82,6 +85,8 @@ export default observer(function DetailsPanel() {
                         Open the records in the browser
                     </Link>
                 )}
+                <CollaborationSection key={selected.id} />
+                </>}
             </Box>
         </Panel>
     );
