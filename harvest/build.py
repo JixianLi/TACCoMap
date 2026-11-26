@@ -68,10 +68,12 @@ def first_non_null(existing, incoming):
 
 
 def merge_sources(existing_sources, incoming_sources):
-    seen = {(source["source"], source["source_record_id"]) for source in existing_sources}
+    """Deduplicated by (source, record id, url): one source can cite one record in two places (the two XSEDE archive
+    editions both list a project that spans 2011)."""
+    seen = {(source["source"], source["source_record_id"], source.get("url")) for source in existing_sources}
     merged = list(existing_sources)
     for source in incoming_sources:
-        key = (source["source"], source["source_record_id"])
+        key = (source["source"], source["source_record_id"], source.get("url"))
         if key not in seen:
             seen.add(key)
             merged.append(source)
