@@ -5,6 +5,7 @@ Modes:
   check_publishable.py PATH ...        the given files or directories
   check_publishable.py --staged        the index contents of staged files (used by the pre-commit hook)
   check_publishable.py --site DIR      a staged GitHub Pages directory, which must match SITE_ALLOWLIST
+  check_publishable.py --map-site DIR  a staged map Pages directory (map/ build), which must match MAP_SITE_ALLOWLIST
 
 Exit status 1 if anything fails. Matches are reported by location and count only, never by value,
 so the output itself is safe to paste into an issue or a chat.
@@ -36,6 +37,14 @@ SITE_ALLOWLIST = {
     "data/allocations.json", "data/funding_opportunities.json", "data/people.json",
     "data/institutions.json",
 }
+# The map's Vite build: fixed files plus content-hashed bundles, whose names change on every build.
+MAP_SITE_ALLOWLIST = {"index.html", ".nojekyll", "data/map_institutions.json"}
+MAP_SITE_ASSET_PATTERN = re.compile(r"assets/[\w.-]+\.(?:js|css|woff2)")
+# Minified library code is full of decimal constants (shader polynomials, color matrices, PRNG seeds) that read as
+# phone numbers; every other check still runs on the bundles, and all checks run on the map's data and index.html.
+MAP_SITE_ASSET_SKIPPED_CHECKS = ("phone number",)
+# Git's file mode for a submodule entry: a commit id in another repository, not file content.
+GITLINK_MODE = "160000"
 
 EMAIL_PATTERN = re.compile(r"(?<![\w.%+-])[\w.%+-]+@[\w-]+(?:\.[\w-]+)*\.[A-Za-z]{2,}\b")
 OBFUSCATED_AT = r"\s*[\[({<]\s*at\s*[\])}>]\s*"
@@ -88,6 +97,7 @@ def parse_arguments():
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--staged", action="store_true", help="check the git index contents of staged files")
     mode.add_argument("--site", metavar="DIR", help="check a staged Pages directory against the allowlist")
+    mode.add_argument("--map-site", metavar="DIR", help="check a staged map Pages directory against the map allowlist")
     return parser.parse_args()
 
 
@@ -127,10 +137,18 @@ def explicit_paths(arguments):
     return paths
 
 
+def staged_gitlink_paths():
+    entries = run_git("ls-files", "--stage", "-z").decode().split("\0")
+    return {entry.split("\t", 1)[1] for entry in entries if entry.startswith(GITLINK_MODE + " ")}
+
+
 def staged_candidates():
-    names = run_git("diff", "--cached", "--name-only", "--diff-filter=ACMR", "-z").decode().split("\0")
-    for name in filter(None, names):
-        yield name, lambda name=name: run_git("cat-file", "blob", f":{name}")
+    """(candidates, skipped submodule paths). A staged submodule is only a commit id with no blob to read; its
+    contents belong to the other repository and are not published from this one."""
+    names = [name for name in run_git("diff", "--cached", "--name-only", "--diff-filter=ACMR", "-z").decode().split("\0") if name]
+    gitlinks = staged_gitlink_paths()
+    candidates = [(name, lambda name=name: run_git("cat-file", "blob", f":{name}")) for name in names if name not in gitlinks]
+    return candidates, sorted(set(names) & gitlinks)
 
 
 def path_failures(relative_path, size_bytes):
@@ -161,10 +179,10 @@ def count_distinct_spans(sorted_spans):
     return count
 
 
-def content_failures(relative_path, text, api_key):
+def content_failures(relative_path, text, api_key, skipped_checks=()):
     failures = []
     for check_name, patterns, applies_to in CONTENT_CHECKS:
-        if not applies_to(relative_path):
+        if check_name in skipped_checks or not applies_to(relative_path):
             continue
         match_spans = sorted(match.span() for pattern in patterns for match in pattern.finditer(text))
         if match_spans:
@@ -207,9 +225,11 @@ def published_record_failures(relative_path, text):
     return failures
 
 
-def site_allowlist_failures(relative_paths):
-    failures = [f"{path}: not in site allowlist" for path in sorted(set(relative_paths) - SITE_ALLOWLIST)]
-    failures += [f"{path}: missing from staged site" for path in sorted(SITE_ALLOWLIST - set(relative_paths))]
+def site_allowlist_failures(relative_paths, allowlist=SITE_ALLOWLIST, allowed_pattern=None):
+    unlisted = {path for path in relative_paths
+                if path not in allowlist and not (allowed_pattern and allowed_pattern.fullmatch(path))}
+    failures = [f"{path}: not in site allowlist" for path in sorted(unlisted)]
+    failures += [f"{path}: missing from staged site" for path in sorted(allowlist - set(relative_paths))]
     return failures
 
 
@@ -217,27 +237,35 @@ def main():
     arguments = parse_arguments()
     api_key = os.environ.get("OPENALEX_API_KEY", "").strip()
     failures = []
-    if arguments.site:
-        site_directory = pathlib.Path(arguments.site)
+    skipped_submodules = []
+    if arguments.site or arguments.map_site:
+        site_directory = pathlib.Path(arguments.site or arguments.map_site)
         if not site_directory.is_dir():
             sys.exit(f"not a directory: {site_directory}")
         site_files = files_under(site_directory)
         candidates = [(path.relative_to(site_directory).as_posix(), path.read_bytes) for path in site_files]
-        failures += site_allowlist_failures([relative_path for relative_path, _ in candidates])
+        relative_paths = [relative_path for relative_path, _ in candidates]
+        failures += (site_allowlist_failures(relative_paths, MAP_SITE_ALLOWLIST, MAP_SITE_ASSET_PATTERN)
+                     if arguments.map_site else site_allowlist_failures(relative_paths))
     elif arguments.staged:
-        candidates = list(staged_candidates())
+        candidates, skipped_submodules = staged_candidates()
     else:
         candidates = list(worktree_candidates(explicit_paths(arguments.paths) if arguments.paths else default_paths()))
 
     for relative_path, read_bytes in candidates:
         content = read_bytes()
         text = content.decode("utf-8", errors="replace")
-        for failure in path_failures(relative_path, len(content)) + content_failures(relative_path, text, api_key) + published_record_failures(
+        skipped_checks = (MAP_SITE_ASSET_SKIPPED_CHECKS
+                          if arguments.map_site and MAP_SITE_ASSET_PATTERN.fullmatch(relative_path) else ())
+        for failure in path_failures(relative_path, len(content)) + content_failures(
+                relative_path, text, api_key, skipped_checks) + published_record_failures(
                 relative_path, text):
             failures.append(f"{relative_path}: {failure}")
 
     for failure in failures:
         print(f"FAIL {failure}")
+    for path in skipped_submodules:
+        print(f"skipped submodule pointer {path} (its files are another repository's)")
     print(f"checked {len(candidates)} file(s); {len(failures)} failure(s)"
           f"{'' if api_key else '; OPENALEX_API_KEY not set, key check skipped'}")
     return 1 if failures else 0

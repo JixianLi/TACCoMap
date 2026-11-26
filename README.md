@@ -39,6 +39,10 @@ uv run python -m http.server -d web 8000             # open http://localhost:800
 # 4. Map preview (WebUVisBox scenario in map/; needs Node 18+). build.py writes map/public/data/map_institutions.json
 git submodule update --init                          # once: map/vendor/webuvisbox
 cd map && npm install && npm run dev                 # open the URL Vite prints; keep step 3 running for "open in browser" links
+
+# 5. Publish the map (only the map; the record browser is not published) to GitHub Pages
+sh scripts/publish_map.sh                            # build into publish/ and run the guard (--map-site)
+sh scripts/publish_map.sh --push                     # same, then force-push publish/ as the gh-pages branch
 ```
 
 Re-running a harvester is cheap because responses are cached; delete `data/raw/<source>/` to force a refresh.

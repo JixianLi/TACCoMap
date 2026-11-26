@@ -166,8 +166,9 @@ Stdlib-only check that fails (exit 1) on anything that must stay local. Matches 
   `person_id`; titles and descriptions may not hold coordinates finer than two decimals.
 - `uv run python harvest/check_publishable.py`: tracked plus untracked-not-ignored files, plus everything under `web/`.
 - `uv run python harvest/check_publishable.py PATH ...`: the given files or folders, recursively.
-- `uv run python harvest/check_publishable.py --staged`: the index copies of staged files (what will actually be committed).
+- `uv run python harvest/check_publishable.py --staged`: the index copies of staged files (what will actually be committed). A staged submodule (`map/vendor/webuvisbox`) is only a commit id in another repository, with no file content here: it is skipped and named in the output.
 - `uv run python harvest/check_publishable.py --site DIR`: a staged GitHub Pages folder; fails on any file outside the allowlist (`index.html`, `style.css`, `app.js`, `data.js`, `data/{meta,papers,awards,datasets,allocations,funding_opportunities,people,institutions}.json`) and on any allowlisted file that is missing, then runs every content check.
+- `uv run python harvest/check_publishable.py --map-site DIR`: the staged map site (`scripts/publish_map.sh` stages it in `publish/`); the same checks against its own allowlist: `index.html`, `.nojekyll`, `data/map_institutions.json`, and content-hashed `assets/*.js|css|woff2`.
 
 Checks: paths under `data/raw/`, `data/evidence/`, `data/normalized/`, `data/review/` or a publish staging folder (`publish/`, …); any `person_merge_log*.json`; files over 45,000,000 bytes; emails (plain and obfuscated), mailto links, phone numbers; personal social-media profile URLs; the ORCID QA field names as JSON keys; person-note wording in person files (`data/manual/person*.json`, `people.json`); local absolute paths (`/Users/`, `/home/`, `/private/`); and occurrences of `$OPENALEX_API_KEY` when it is set in the environment (count only). GitHub repository links are not flagged.
 

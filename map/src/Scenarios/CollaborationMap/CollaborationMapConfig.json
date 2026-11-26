@@ -28,7 +28,6 @@
         "fit_rows": {"sm": 13}
     },
     "global_data": {
-        "data_url": "data/map_institutions.json",
-        "browser_base_url": "http://localhost:8000/"
+        "data_url": "data/map_institutions.json"
     }
 }

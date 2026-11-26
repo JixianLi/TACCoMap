@@ -52,6 +52,7 @@ export default observer(function DetailsPanel() {
     const byType = countsByRelationshipType(selected.counts, filter, relationshipTypes.length);
     const span = yearSpan(selected.counts, filter);
     const total = countRows(selected.counts, filter);
+    const browserUrl = context.browserUrl(selected.id);
     return (
         <Panel panelName="Details" appbarContent={<Button size="small" onClick={() => context.selectInstitution(null)}>Clear</Button>}>
             <Box sx={{ width: 1 }}>
@@ -77,10 +78,12 @@ export default observer(function DetailsPanel() {
                 <Typography variant="caption" sx={{ display: "block", color: "text.secondary", mt: 0.5 }}>
                     A record with several types counts under each.
                 </Typography>
-                <Link href={context.browserUrl(selected.id)} target="_blank" rel="noopener noreferrer"
-                      variant="body2" sx={{ display: "inline-block", mt: 1.5 }}>
-                    Open the records in the browser
-                </Link>
+                {browserUrl && (
+                    <Link href={browserUrl} target="_blank" rel="noopener noreferrer"
+                          variant="body2" sx={{ display: "inline-block", mt: 1.5 }}>
+                        Open the records in the browser
+                    </Link>
+                )}
             </Box>
         </Panel>
     );

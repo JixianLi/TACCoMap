@@ -13,7 +13,8 @@ export interface InstitutionCount {
 
 export class CollaborationMapGlobalContext implements GlobalContext {
     dataUrl = "data/map_institutions.json";
-    browserBaseUrl = "../web/";
+    // The record browser is not published; only a dev session links to a local copy (CLAUDE.md "Web UI").
+    browserBaseUrl: string | null = import.meta.env.DEV ? "http://localhost:8000/" : null;
     data: MapAggregate | null = null;
     loadError: string | null = null;
 
@@ -31,7 +32,6 @@ export class CollaborationMapGlobalContext implements GlobalContext {
 
     initialize(globalData: any): void {
         this.dataUrl = globalData?.data_url ?? this.dataUrl;
-        this.browserBaseUrl = globalData?.browser_base_url ?? this.browserBaseUrl;
     }
 
     async asyncInitialize(): Promise<void> {
@@ -49,7 +49,7 @@ export class CollaborationMapGlobalContext implements GlobalContext {
     }
 
     toObject(): any {
-        return { data_url: this.dataUrl, browser_base_url: this.browserBaseUrl };
+        return { data_url: this.dataUrl };
     }
 
     get years(): number[] {
@@ -153,7 +153,8 @@ export class CollaborationMapGlobalContext implements GlobalContext {
         this.hoveredInstitutionId = institutionId;
     }
 
-    browserUrl(institutionId: string): string {
+    browserUrl(institutionId: string): string | null {
+        if (this.browserBaseUrl === null) return null;
         return `${this.browserBaseUrl}#/institution/${encodeURIComponent(institutionId)}`;
     }
 }
